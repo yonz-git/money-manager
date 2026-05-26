@@ -34,5 +34,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local database folder
-db/
+# Ignore local database folder
+db-assets/
