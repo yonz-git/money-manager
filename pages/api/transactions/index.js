@@ -2,6 +2,7 @@ import dbConnect from "@/db/connect";
 import Transaction from "@/db/models/Transaction";
 
 export default async function handler(request, response) {
+  try {
   await dbConnect();
 
   if (request.method === "GET") {
@@ -13,4 +14,8 @@ export default async function handler(request, response) {
 
  
   response.status(405).json({ status: "Method not allowed." });
+}catch (error) {
+  response.status(500).json({ status: "Database error.", error: error.message });
+}
+}
 }
