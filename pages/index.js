@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Mock data based on your image
+
 const transactions = [
   { id: 1, name: 'Salary', type: 'Income', date: 'May 12, 2024', amount: '2,500.00', icon: '💼' },
   { id: 2, name: 'Grocery Store', type: 'Expense', date: 'May 12, 2024', amount: '45.60', icon: '🛒' },
