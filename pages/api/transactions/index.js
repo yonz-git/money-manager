@@ -18,3 +18,4 @@ export default async function handler(request, response) {
   response.status(500).json({ status: "Database error.", error: error.message });
 }
 }
+}
