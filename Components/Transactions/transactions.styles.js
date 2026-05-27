@@ -1,0 +1,185 @@
+import styled, { keyframes } from 'styled-components';
+
+export const PageWrapper = styled.div`
+  max-width: 420px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #fff;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+`;
+
+export const Header = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e7eb;
+`;
+
+export const IconButton = styled.button`
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+`;
+
+export const Title = styled.h1`
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+`;
+
+export const Content = styled.div`
+  padding: 16px;
+`;
+
+export const SearchWrapper = styled.div`
+  margin-bottom: 12px;
+`;
+
+export const SearchInput = styled.input`
+  width: 100%;
+  height: 42px;
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 14px;
+  outline: none;
+`;
+
+export const ControlsRow = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+`;
+
+export const Dropdown = styled.select`
+  flex: 1;
+  height: 40px;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  background: #fff;
+  padding: 0 10px;
+  font-size: 14px;
+  outline: none;
+`;
+
+export const List = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const Card = styled.div`
+  border: 1px solid #d7d7d7;
+  border-radius: 4px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+`;
+
+export const CardLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const IconBox = styled.div`
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  color: #333;
+`;
+
+export const CardTitle = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+`;
+
+export const CardMeta = styled.div`
+  font-size: 11px;
+  color: #666;
+`;
+
+export const Amount = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  color: ${({ $income }) => ($income ? '#111' : '#111')};
+`;
+
+export const FooterText = styled.div`
+  text-align: center;
+  margin-top: 14px;
+  font-size: 12px;
+  color: #9b9b9b;
+`;
+
+export const EmptyWrap = styled.div`
+  text-align: center;
+  padding: 50px 20px;
+`;
+
+export const EmptyIcon = styled.div`
+  font-size: 48px;
+  margin-bottom: 14px;
+`;
+
+export const EmptyTitle = styled.h2`
+  margin: 0 0 8px;
+  font-size: 18px;
+`;
+
+export const EmptyText = styled.p`
+  margin: 0;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+`;
+
+const shimmer = keyframes`
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+`;
+
+export const SkeletonCard = styled.div`
+  border: 1px solid #ececec;
+  border-radius: 4px;
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+
+export const SkeletonBlock = styled.div`
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: ${shimmer} 1.2s ease-in-out infinite;
+  border-radius: 4px;
+`;
+
+export const SkeletonIcon = styled(SkeletonBlock)`
+  width: 26px;
+  height: 26px;
+`;
+
+export const SkeletonLineWrap = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const SkeletonLine = styled(SkeletonBlock)`
+  height: 10px;
+  width: ${({ $w }) => $w || '100%'};
+`;
+
+export const SkeletonAmount = styled(SkeletonBlock)`
+  width: 52px;
+  height: 10px;
+`;
