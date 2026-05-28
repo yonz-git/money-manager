@@ -51,7 +51,7 @@ export default function TransactionsPage() {
           setSortBy={setSortBy}
         />
 
-        {loading ? (
+        {isLoading ? (
           <TransactionsSkeleton />
         ) : showEmpty ? (
           <TransactionsEmptyState />
