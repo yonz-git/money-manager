@@ -12,16 +12,9 @@ export const PageWrapper = styled.div`
 export const Header = styled.header`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Centered since the menu icon is removed */
   padding: 14px 16px;
   border-bottom: 1px solid #e5e7eb;
-`;
-
-export const IconButton = styled.button`
-  border: none;
-  background: transparent;
-  font-size: 20px;
-  cursor: pointer;
 `;
 
 export const Title = styled.h1`
@@ -32,20 +25,6 @@ export const Title = styled.h1`
 
 export const Content = styled.div`
   padding: 16px;
-`;
-
-export const SearchWrapper = styled.div`
-  margin-bottom: 12px;
-`;
-
-export const SearchInput = styled.input`
-  width: 100%;
-  height: 42px;
-  border: 1px solid #cfcfcf;
-  border-radius: 6px;
-  padding: 0 12px;
-  font-size: 14px;
-  outline: none;
 `;
 
 export const ControlsRow = styled.div`
@@ -109,7 +88,7 @@ export const CardMeta = styled.div`
 export const Amount = styled.div`
   font-size: 14px;
   font-weight: 600;
-  color: ${({ $income }) => ($income ? '#111' : '#111')};
+  color: ${({ $income }) => ($income ? '#10b981' : '#ef4444')};
 `;
 
 export const FooterText = styled.div`

@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import TransactionsHeader from './TransactionsHeader';
-import TransactionsSearchBar from './TransactionsSearchBar';
 import TransactionsControls from './TransactionsControls';
 import TransactionsList from './TransactionsList';
 import TransactionsSkeleton from './TransactionsSkeleton';
@@ -9,8 +8,6 @@ import { PageWrapper, Content, FooterText } from './transactions.styles';
 
 export default function TransactionsPage() {
   const [transactions, setTransactions] = useState([]);
-  const [search, setSearch] = useState('');
-  const [filterType, setFilterType] = useState('All');
   const [sortBy, setSortBy] = useState('Newest');
   const [loading, setLoading] = useState(true);
 
@@ -31,24 +28,10 @@ export default function TransactionsPage() {
     loadData();
   }, []);
 
-  const filteredTransactions = useMemo(() => {
+  const sortedTransactions = useMemo(() => {
     let data = Array.isArray(transactions) ? [...transactions] : [];
 
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      data = data.filter(
-        (tx) =>
-          tx.title?.toLowerCase().includes(q) ||
-          tx.category?.toLowerCase().includes(q)
-      );
-    }
-
-    if (filterType !== 'All') {
-      data = data.filter((tx) =>
-        filterType === 'Income' ? tx.amount >= 0 : tx.amount < 0
-      );
-    }
-
+    // here implementing sorting logic based on current state
     if (sortBy === 'Newest') {
       data.sort((a, b) => new Date(b.date) - new Date(a.date));
     } else if (sortBy === 'Oldest') {
@@ -60,18 +43,16 @@ export default function TransactionsPage() {
     }
 
     return data;
-  }, [transactions, search, filterType, sortBy]);
+  }, [transactions, sortBy]);
 
-  const showEmpty = !loading && filteredTransactions.length === 0;
+  const showEmpty = !loading && sortedTransactions.length === 0;
 
   return (
     <PageWrapper>
       <TransactionsHeader />
       <Content>
-        <TransactionsSearchBar search={search} setSearch={setSearch} />
+       
         <TransactionsControls
-          filterType={filterType}
-          setFilterType={setFilterType}
           sortBy={sortBy}
           setSortBy={setSortBy}
         />
@@ -82,12 +63,8 @@ export default function TransactionsPage() {
           <TransactionsEmptyState />
         ) : (
           <>
-            <TransactionsList transactions={filteredTransactions} />
-            <FooterText>
-              {filterType === 'All' && search.trim() === ''
-                ? 'Pull up to load more'
-                : 'No more transactions'}
-            </FooterText>
+            <TransactionsList transactions={sortedTransactions} />
+            
           </>
         )}
       </Content>

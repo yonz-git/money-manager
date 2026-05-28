@@ -36,7 +36,7 @@ export default function TransactionCard({ transaction }) {
         </div>
       </CardLeft>
 
-      <Amount $income={isIncome}>{Math.abs(transaction.amount).toFixed(2)}</Amount>
+      <Amount $income={isIncome}>{(transaction.amount).toFixed(2)}</Amount>
     </Card>
   );
 }
