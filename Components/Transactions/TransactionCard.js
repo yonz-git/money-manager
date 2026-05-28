@@ -22,6 +22,7 @@ function getIcon(category) {
 }
 
 export default function TransactionCard({ transaction }) {
+
   const isIncome = transaction.amount >= 0;
 
   return (
@@ -36,7 +37,14 @@ export default function TransactionCard({ transaction }) {
         </div>
       </CardLeft>
 
-      <Amount $income={isIncome}>{(transaction.amount).toFixed(2)}</Amount>
+      <Amount $income={isIncome}>
+        {isIncome ? '' : '-'}
+        {new Intl.NumberFormat('en-US', {
+          style: 'decimal',
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }).format(Math.abs(transaction.amount))}
+      </Amount>
     </Card>
   );
 }
