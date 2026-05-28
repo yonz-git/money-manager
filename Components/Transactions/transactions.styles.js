@@ -162,3 +162,13 @@ export const SkeletonAmount = styled(SkeletonBlock)`
   width: 52px;
   height: 10px;
 `;
+
+export const ListWrapper = styled.div`
+  max-height: 70vh;       
+  overflow-y: auto;        
+ overflow-x: hidden;     
+  padding-right: 6px;     
+  display: flex;
+  flex-direction: column;
+  gap: 12px;    
+`;  

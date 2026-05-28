@@ -1,13 +1,13 @@
 import React from 'react';
 import TransactionCard from './TransactionCard';
-import { List } from './transactions.styles';
+import { ListWrapper } from './transactions.styles';
 
 export default function TransactionsList({ transactions }) {
   return (
-    <List>
+    <ListWrapper>
       {transactions.map((tx) => (
         <TransactionCard key={tx._id} transaction={tx} />
       ))}
-    </List>
+    </ListWrapper>
   );
 }
