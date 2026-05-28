@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import useSWR from 'swr';
 import TransactionsHeader from './TransactionsHeader';
 import TransactionsControls from './TransactionsControls';
 import TransactionsList from './TransactionsList';
@@ -6,30 +7,23 @@ import TransactionsSkeleton from './TransactionsSkeleton';
 import TransactionsEmptyState from './TransactionsEmptyState';
 import { PageWrapper, Content, FooterText } from './transactions.styles';
 
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
 export default function TransactionsPage() {
-  const [transactions, setTransactions] = useState([]);
+  
   const [sortBy, setSortBy] = useState('Newest');
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const res = await fetch('/api/transactions', { cache: 'no-store' });
-        const data = await res.json();
-        setTransactions(Array.isArray(data) ? data : data.transactions || []);
-      } catch (error) {
-        console.error('Failed to load transactions:', error);
-        setTransactions([]);
-      } finally {
-        setLoading(false);
-      }
-    }
+   const { data, error, isLoading } = useSWR('/api/transactions', fetcher);
 
-    loadData();
-  }, []);
+  const transactions = useMemo(() => {
+    if (!data) return [];
+    return Array.isArray(data) ? data : data.transactions || [];
+  }, [data]);
 
   const sortedTransactions = useMemo(() => {
-    let data = Array.isArray(transactions) ? [...transactions] : [];
+     if (!data) return [];
+    let rawTransactions = Array.isArray(data) ? data : data.transactions || [];
+    let sortedData = [...rawTransactions];
 
     // here implementing sorting logic based on current state
     if (sortBy === 'Newest') {
@@ -43,9 +37,9 @@ export default function TransactionsPage() {
     }
 
     return data;
-  }, [transactions, sortBy]);
+  }, [data, sortBy]);
 
-  const showEmpty = !loading && sortedTransactions.length === 0;
+  const showEmpty = !isLoading && sortedTransactions.length === 0;
 
   return (
     <PageWrapper>
