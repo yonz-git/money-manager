@@ -12,8 +12,7 @@ export default async function handler(request, response) {
     return;
   }
 
- 
-  response.status(405).json({ status: "Method not allowed." });
+response.status(405).json({ status: "Method not allowed." });
 }catch (error) {
   response.status(500).json({ status: "Database error.", error: error.message });
 }
