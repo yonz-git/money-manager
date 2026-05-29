@@ -1,65 +1,147 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import useSWR from 'swr';
 import TransactionsHeader from './TransactionsHeader';
 import TransactionsControls from './TransactionsControls';
 import TransactionsList from './TransactionsList';
 import TransactionsSkeleton from './TransactionsSkeleton';
 import TransactionsEmptyState from './TransactionsEmptyState';
-import { PageWrapper, Content, FooterText } from './transactions.styles';
+import TransactionForm from '../TransactionsForm/TransactionsForm';
+import { PageWrapper, Content } from './transactions.styles';
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
+const apiFetcher = async (url) => {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error('Network error');
+  return response.json();
+};
+
+const createTemporaryTransaction = (formData) => ({
+  _id: `temp-${Date.now()}`,
+  ...formData,
+});
+
+const getOptimisticState = (currentCache, temporaryTransaction) => {
+  if (Array.isArray(currentCache)) {
+    return [temporaryTransaction, ...currentCache];
+  }
+  return {
+    ...currentCache,
+    transactions: [temporaryTransaction, ...(currentCache?.transactions ?? [])],
+  };
+};
+
+const getFinalizedCacheState = (savedTransaction, currentCache, temporaryId) => {
+  const removeTemporaryItem = (list) => 
+    list.filter((transaction) => transaction._id !== temporaryId);
+
+  if (Array.isArray(currentCache)) {
+    return [savedTransaction, ...removeTemporaryItem(currentCache)];
+  }
+  return {
+    ...currentCache,
+    transactions: [savedTransaction, ...removeTemporaryItem(currentCache.transactions ?? [])],
+  };
+};
 
 export default function TransactionsPage() {
-  
   const [sortBy, setSortBy] = useState('Newest');
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
-   const { data, error, isLoading } = useSWR('/api/transactions', fetcher);
+  const { 
+    data: cachedTransactionsPayload, 
+    isLoading: isTransactionsLoading, 
+    mutate: mutateTransactionsCache 
+  } = useSWR('/api/transactions', apiFetcher, { onError: () => {} });
 
-  const transactions = useMemo(() => {
-    if (!data) return [];
-    return Array.isArray(data) ? data : data.transactions || [];
-  }, [data]);
+  const { 
+    data: cachedCategoriesPayload 
+  } = useSWR('/api/category', apiFetcher, { onError: () => {} });
+
+  const transactionsList = useMemo(() => {
+    if (!cachedTransactionsPayload) return [];
+    return Array.isArray(cachedTransactionsPayload) 
+      ? cachedTransactionsPayload 
+      : cachedTransactionsPayload.transactions ?? [];
+  }, [cachedTransactionsPayload]);
+
+  const categoriesList = useMemo(() => {
+    return Array.isArray(cachedCategoriesPayload) ? cachedCategoriesPayload : [];
+  }, [cachedCategoriesPayload]);
 
   const sortedTransactions = useMemo(() => {
-     if (!data) return [];
-    let rawTransactions = Array.isArray(data) ? data : data.transactions || [];
-    let sortedData = [...rawTransactions];
+    if (transactionsList.length === 0) return [];
+    const transactionsClone = [...transactionsList];
 
-    // here implementing sorting logic based on current state
     if (sortBy === 'Newest') {
-      data.sort((a, b) => new Date(b.date) - new Date(a.date));
+      transactionsClone.sort((a, b) => b.date.localeCompare(a.date));
     } else if (sortBy === 'Oldest') {
-      data.sort((a, b) => new Date(a.date) - new Date(b.date));
+      transactionsClone.sort((a, b) => a.date.localeCompare(b.date));
     } else if (sortBy === 'AmountHigh') {
-      data.sort((a, b) => b.amount - a.amount);
+      transactionsClone.sort((a, b) => b.amount - a.amount);
     } else if (sortBy === 'AmountLow') {
-      data.sort((a, b) => a.amount - b.amount);
+      transactionsClone.sort((a, b) => a.amount - b.amount);
     }
 
-    return data;
-  }, [data, sortBy]);
+    return transactionsClone;
+  }, [transactionsList, sortBy]);
 
-  const showEmpty = !isLoading && sortedTransactions.length === 0;
+  const handleAddTransaction = useCallback(async (formData) => {
+    const temporaryTransaction = createTemporaryTransaction(formData);
+
+    const updateCacheWithServerResponse = (savedTransaction, currentCache) => {
+      return getFinalizedCacheState(savedTransaction, currentCache, temporaryTransaction._id);
+    };
+
+    setIsFormOpen(false);
+
+    try {
+      await mutateTransactionsCache(
+        fetch('/api/transactions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        }).then((response) => {
+          if (!response.ok) throw new Error('Database error saving transaction.');
+          return response.json();
+        }),
+        {
+          optimisticData: getOptimisticState(cachedTransactionsPayload, temporaryTransaction),
+          populateCache: updateCacheWithServerResponse,
+          rollbackOnError: true,
+          revalidate: false,
+        }
+      );
+    } catch (error) {
+      console.error('Network error saving transaction:', error);
+      alert('Failed to submit transaction. UI state rolled back.');
+    }
+  }, [cachedTransactionsPayload, mutateTransactionsCache]);
+
+  const shouldShowEmptyState = !isTransactionsLoading && sortedTransactions.length === 0;
 
   return (
     <PageWrapper>
-      <TransactionsHeader />
+      <TransactionsHeader
+        isFormOpen={isFormOpen}
+        setIsFormOpen={setIsFormOpen}
+      />
       <Content>
-       
-        <TransactionsControls
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-        />
+        {isFormOpen && (
+          <div style={{ marginBottom: '20px', width: '100%' }}>
+            <TransactionForm
+             onAddTransaction={handleAddTransaction} 
+             categoriesData={categoriesList}
+            />
+          </div>
+        )}
 
-        {isLoading ? (
+        <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
+
+        {isTransactionsLoading ? (
           <TransactionsSkeleton />
-        ) : showEmpty ? (
+        ) : shouldShowEmptyState ? (
           <TransactionsEmptyState />
         ) : (
-          <>
-            <TransactionsList transactions={sortedTransactions} />
-            
-          </>
+          <TransactionsList transactions={sortedTransactions} />
         )}
       </Content>
     </PageWrapper>
