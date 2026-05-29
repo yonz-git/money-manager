@@ -50,7 +50,7 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
     }
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     const validationErrors = {};
@@ -66,15 +66,19 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
     }
 
     setErrors({});
-    onAddTransaction({
-      title: formData.title.trim(),
-      amount: Number(formData.amount),
-      category: formData.category,
-      type: formData.type,
-      date: formData.date,
-    });
 
-    setFormData(initialFormData);
+    try {
+      await onAddTransaction({
+        title: formData.title.trim(),
+        amount: Number(formData.amount),
+        category: formData.category,
+        type: formData.type,
+        date: formData.date,
+      });
+      setFormData(initialFormData);
+    } catch {
+      // form stays open, user's input is preserved
+    }
   }
 
   return (

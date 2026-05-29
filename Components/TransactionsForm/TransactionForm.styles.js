@@ -115,38 +115,6 @@ export const RadioGroup = styled.div`
   margin-top: 8px;
 `;
 
-export const DateWrapper = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 10px 12px;
-  cursor: pointer;
-  background-color: #fff;
-`;
-
-export const DateText = styled.span`
-  font-size: 14px;
-  color: #111;
-  flex: 1;
-`;
-
-export const CalendarIcon = styled.span`
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-`;
-
-export const HiddenDateInput = styled.input`
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  pointer-events: none;
-`;
-
 export const SubmitButton = styled.button`
   width: 100%;
   padding: 12px;
