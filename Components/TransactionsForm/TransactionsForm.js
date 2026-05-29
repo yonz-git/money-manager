@@ -25,18 +25,22 @@ function getTodayDateString() {
   return `${year}-${month}-${day}`;
 }
 
+const initialFormData = {
+  title: "",
+  amount: "",
+  category: "",
+  type: "",
+  date: getTodayDateString(),
+};
+
 export default function TransactionForm({ onAddTransaction, categoriesData = [] }) {
-  const [title, setTitle] = useState("");
-  const [amount, setAmount] = useState("");
-  const [category, setCategory] = useState("");
-  const [type, setType] = useState("");
-  const [date, setDate] = useState(getTodayDateString());
+  const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState({});
 
   function handleAmountChange(event) {
     const val = event.target.value;
     if (val === "" || /^\d*\.?\d{0,2}$/.test(val)) {
-      setAmount(val);
+      setFormData({ ...formData, amount: val });
     }
   }
 
@@ -50,11 +54,11 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
     event.preventDefault();
 
     const errs = {};
-    if (!title || title.trim() === "") errs.title = "Title description is required.";
-    if (!amount || isNaN(amount) || Number(amount) <= 0) errs.amount = "Amount must be greater than 0.";
-    if (!category) errs.category = "Please select a transaction category.";
-    if (!type) errs.type = "Please select Income or Expense.";
-    if (!date) errs.date = "Transaction Date is required.";
+    if (!formData.title || formData.title.trim() === "") errs.title = "Title description is required.";
+    if (!formData.amount || isNaN(formData.amount) || Number(formData.amount) <= 0) errs.amount = "Amount must be greater than 0.";
+    if (!formData.category) errs.category = "Please select a transaction category.";
+    if (!formData.type) errs.type = "Please select Income or Expense.";
+    if (!formData.date) errs.date = "Transaction Date is required.";
 
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
@@ -63,18 +67,14 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
 
     setErrors({});
     onAddTransaction({
-      title: title.trim(),
-      amount: Number(amount),
-      category,
-      type,
-      date,
+      title: formData.title.trim(),
+      amount: Number(formData.amount),
+      category: formData.category,
+      type: formData.type,
+      date: formData.date,
     });
 
-    setTitle("");
-    setAmount("");
-    setCategory("");
-    setType("");
-    setDate(getTodayDateString());
+    setFormData(initialFormData);
   }
 
   return (
@@ -89,8 +89,8 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
             name="title"
             type="text"
             placeholder="e.g., Weekly Groceries"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
+            value={formData.title}
+            onChange={(event) => setFormData({ ...formData, title: event.target.value })}
             $hasError={!!errors.title}
           />
           {errors.title && <ErrorText>{errors.title}</ErrorText>}
@@ -106,7 +106,7 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
             step="0.01"
             min="0.01"
             placeholder="0.00"
-            value={amount}
+            value={formData.amount}
             onChange={handleAmountChange}
             onKeyDown={handleAmountKeyDown}
             $hasError={!!errors.amount}
@@ -120,8 +120,8 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
             <SelectElement
               id="category"
               name="category"
-              value={category}
-              onChange={(event) => setCategory(event.target.value)}
+              value={formData.category}
+              onChange={(event) => setFormData({ ...formData, category: event.target.value })}
               $hasError={!!errors.category}
             >
               <option value="">Please select a category</option>
@@ -157,16 +157,16 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
           <RadioGroup>
             {["Income", "Expense"].map((transactionType) => (
               <RadioLabel key={transactionType} htmlFor={`type-${transactionType}`}>
-                <RadioCircle $checked={type === transactionType} $value={transactionType}>
-                  {type === transactionType && <RadioDot />}
+                <RadioCircle $checked={formData.type === transactionType} $value={transactionType}>
+                  {formData.type === transactionType && <RadioDot />}
                 </RadioCircle>
                 <VisuallyHiddenInput
                   id={`type-${transactionType}`}
                   name="transactionType"
                   type="radio"
                   value={transactionType}
-                  checked={type === transactionType}
-                  onChange={(event) => setType(event.target.value)}
+                  checked={formData.type === transactionType}
+                  onChange={(event) => setFormData({ ...formData, type: event.target.value })}
                 />
                 {transactionType}
               </RadioLabel>
@@ -181,8 +181,8 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
             id="date"
             name="date"
             type="date"
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
+            value={formData.date}
+            onChange={(event) => setFormData({ ...formData, date: event.target.value })}
             $hasError={!!errors.date}
           />
           {errors.date && <ErrorText>{errors.date}</ErrorText>}
