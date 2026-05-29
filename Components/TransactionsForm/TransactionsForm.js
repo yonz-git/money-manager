@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import {
   Card,
   Heading,
@@ -11,10 +11,6 @@ import {
   RadioLabel,
   RadioCircle,
   RadioDot,
-  DateWrapper,
-  DateText,
-  CalendarIcon,
-  HiddenDateInput,
   SubmitButton,
   ErrorText,
 } from "./TransactionForm.styles";
@@ -27,16 +23,6 @@ function getTodayDateString() {
   return `${year}-${month}-${day}`;
 }
 
-function formatDisplayDate(isoDate) {
-  if (!isoDate) return "";
-  const [year, month, day] = isoDate.split("-").map(Number);
-  return new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  }).format(new Date(year, month - 1, day));
-}
-
 export default function TransactionForm({ onAddTransaction, categoriesData = [] }) {
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
@@ -45,29 +31,21 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
   const [date, setDate] = useState(getTodayDateString());
   const [errors, setErrors] = useState({});
 
-  const dateInputRef = useRef(null);
-
-  function handleDateWrapperClick() {
-    if (dateInputRef.current && typeof dateInputRef.current.showPicker === "function") {
-      dateInputRef.current.showPicker();
-    }
-  }
-
-  function handleAmountChange(e) {
-    const val = e.target.value;
+  function handleAmountChange(event) {
+    const val = event.target.value;
     if (val === "" || /^\d*\.?\d{0,2}$/.test(val)) {
       setAmount(val);
     }
   }
 
-  function handleAmountKeyDown(e) {
-    if (["e", "E", "+", "-"].includes(e.key)) {
-      e.preventDefault();
+  function handleAmountKeyDown(event) {
+    if (["e", "E", "+", "-"].includes(event.key)) {
+      event.preventDefault();
     }
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit(event) {
+    event.preventDefault();
 
     const errs = {};
     if (!title || title.trim() === "") errs.title = "Title description is required.";
@@ -110,7 +88,7 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
             type="text"
             placeholder="e.g., Weekly Groceries"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(event) => setTitle(event.target.value)}
             $hasError={!!errors.title}
           />
           {errors.title && <ErrorText>{errors.title}</ErrorText>}
@@ -141,7 +119,7 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
               id="category"
               name="category"
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(event) => setCategory(event.target.value)}
               $hasError={!!errors.category}
             >
               <option value="">Please select a category</option>
@@ -177,7 +155,7 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
           <div style={{ display: "flex", gap: "32px", marginTop: "8px" }}>
             {["Income", "Expense"].map((val) => (
               <RadioLabel key={val} htmlFor={`type-${val}`}>
-                <RadioCircle $checked={type === val}>
+                <RadioCircle $checked={type === val} $value={val}>
                   {type === val && <RadioDot />}
                 </RadioCircle>
                 <input
@@ -186,7 +164,7 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
                   type="radio"
                   value={val}
                   checked={type === val}
-                  onChange={(e) => setType(e.target.value)}
+                  onChange={(event) => setType(event.target.value)}
                   style={{ display: "none" }}
                 />
                 {val}
@@ -198,34 +176,14 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
 
         <Field>
           <LabelText htmlFor="date">Transaction Date *</LabelText>
-          <DateWrapper onClick={handleDateWrapperClick}>
-            <DateText>{formatDisplayDate(date)}</DateText>
-            <CalendarIcon aria-hidden="true">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#999"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
-            </CalendarIcon>
-            <HiddenDateInput
-              id="date"
-              name="date"
-              type="date"
-              ref={dateInputRef}
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-          </DateWrapper>
+          <InputElement
+            id="date"
+            name="date"
+            type="date"
+            value={date}
+            onChange={(event) => setDate(event.target.value)}
+            $hasError={!!errors.date}
+          />
           {errors.date && <ErrorText>{errors.date}</ErrorText>}
         </Field>
 
