@@ -6,7 +6,7 @@ import TransactionsList from "./TransactionsList";
 import TransactionsSkeleton from "./TransactionsSkeleton";
 import TransactionsEmptyState from "./TransactionsEmptyState";
 import TransactionForm from "../TransactionsForm/TransactionsForm";
-import { PageWrapper, Content } from "./transactions.styles";
+import { PageWrapper, Content, FormWrapper } from "./transactions.styles";
 
 async function apiFetcher(url) {
   const response = await fetch(url);
@@ -79,12 +79,12 @@ export default function TransactionsPage() {
       <TransactionsHeader isFormOpen={isFormOpen} onToggleForm={handleToggleForm} />
       <Content>
         {isFormOpen && (
-          <div style={{ marginBottom: "20px", width: "100%" }}>
+          <FormWrapper>
             <TransactionForm
               onAddTransaction={handleAddTransaction}
               categoriesData={categoriesList}
             />
-          </div>
+          </FormWrapper>
         )}
 
         <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
