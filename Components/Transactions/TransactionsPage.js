@@ -5,7 +5,7 @@ import TransactionsControls from './TransactionsControls';
 import TransactionsList from './TransactionsList';
 import TransactionsSkeleton from './TransactionsSkeleton';
 import TransactionsEmptyState from './TransactionsEmptyState';
-import AccountBalance from './AccountBalance'; // 👈 Added your new component
+import AccountBalance from './AccountBalance'; 
 import { PageWrapper, Content, FooterText } from './transactions.styles';
 
 const fetcher = (url) => fetch(url).then((res) => {
