@@ -172,3 +172,24 @@ export const ListWrapper = styled.div`
   flex-direction: column;
   gap: 12px;    
 `;  
+
+export const ToggleButton = styled.button`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #1a1a1a;
+  background: ${({ $isOpen }) => ($isOpen ? '#f5f5f5' : 'none')};
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity, transform 0.2s ease;
+  padding: 0;
+`;
+
+export const FormWrapper = styled.div`
+  margin-bottom: 20px;
+  width: 100%;
+`;
