@@ -76,9 +76,9 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
         date: formData.date,
       });
       setFormData(initialFormData);
-    } catch {
-      // form stays open, user's input is preserved
-    }
+    } catch (error) {
+    setErrors({ submit: error.message });
+  }
   }
 
   return (
