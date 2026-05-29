@@ -196,7 +196,7 @@ export const FormWrapper = styled.div`
   width: 100%;
 `;
 
-// Delete button
+// Delete feature
 
 export const DeleteButton = styled.button`
   background: none;
@@ -213,7 +213,7 @@ export const DeleteButton = styled.button`
 
   &:hover {
     transform: scale(1.1);
-    color: #ef4444; /* Turns red smoothly on hover */
+    color: #ef4444;
   }
 
   &:active {
@@ -234,14 +234,14 @@ export const DeleteModalOverlay = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.4); /* Dimmed background layer */
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000; /* Ensures it floats cleanly above all content layer stacks */
+  z-index: 2000;
 `;
 
-export const DeleteModalDialogContainer = styled.div`
+export const DeleteModalContainer = styled.div`
   background-color: #ffffff;
   padding: 2rem;
   border-radius: 8px;
@@ -276,7 +276,6 @@ export const DeleteModalButton = styled.button`
     background-color 0.15s ease,
     opacity 0.15s ease;
 
-  /* Plainly spelled out styling conditionals matching your system colors */
   background-color: ${(props) =>
     props.$variant === "destructive" ? "#ef4444" : "#e5e7eb"};
   color: ${(props) =>

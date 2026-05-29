@@ -9,7 +9,7 @@ import {
   Amount,
   DeleteButton,
   DeleteModalOverlay,
-  DeleteModalDialogContainer,
+  DeleteModalContainer,
   DeleteConfirmationMessage,
   DeleteModalButtonContainer,
   DeleteModalButton,
@@ -81,7 +81,7 @@ export default function TransactionCard({ transaction }) {
 
       {isDeleteModalOpen && (
         <DeleteModalOverlay>
-          <DeleteModalDialogContainer role="dialog" aria-modal="true">
+          <DeleteModalContainer role="dialog" aria-modal="true">
             <DeleteConfirmationMessage>
               Are you sure you want to permanently delete this transaction?
             </DeleteConfirmationMessage>
@@ -96,7 +96,7 @@ export default function TransactionCard({ transaction }) {
                 Cancel
               </DeleteModalButton>
             </DeleteModalButtonContainer>
-          </DeleteModalDialogContainer>
+          </DeleteModalContainer>
         </DeleteModalOverlay>
       )}
     </Card>
