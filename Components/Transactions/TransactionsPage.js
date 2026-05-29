@@ -14,49 +14,18 @@ async function apiFetcher(url) {
   return response.json();
 }
 
-function createTemporaryTransaction(formData) {
-  return {
-    _id: `temp-${Date.now()}`,
-    ...formData,
-  };
-}
-
-function getOptimisticState(currentCache, temporaryTransaction) {
-  if (Array.isArray(currentCache)) {
-    return [temporaryTransaction, ...currentCache];
-  }
-  return {
-    ...currentCache,
-    transactions: [temporaryTransaction, ...(currentCache?.transactions ?? [])],
-  };
-}
-
-function getFinalizedCacheState(savedTransaction, currentCache, temporaryId) {
-  const filteredList = (list) =>
-    list.filter((transaction) => transaction._id !== temporaryId);
-
-  if (Array.isArray(currentCache)) {
-    return [savedTransaction, ...filteredList(currentCache)];
-  }
-  return {
-    ...currentCache,
-    transactions: [savedTransaction, ...filteredList(currentCache.transactions ?? [])],
-  };
-}
-
 export default function TransactionsPage() {
   const [sortBy, setSortBy] = useState("Newest");
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const {
     data: cachedTransactionsPayload,
+    error: transactionsError,
     isLoading: isTransactionsLoading,
     mutate: mutateTransactionsCache,
-  } = useSWR("/api/transactions", apiFetcher, { onError: () => {} });
+  } = useSWR("/api/transactions", apiFetcher);
 
-  const { data: cachedCategoriesPayload } = useSWR("/api/category", apiFetcher, {
-    onError: () => {},
-  });
+  const { data: cachedCategoriesPayload } = useSWR("/api/category", apiFetcher);
 
   const transactionsList = cachedTransactionsPayload
     ? Array.isArray(cachedTransactionsPayload)
@@ -89,31 +58,15 @@ export default function TransactionsPage() {
   const shouldShowEmptyState = !isTransactionsLoading && sortedTransactions.length === 0;
 
   async function handleAddTransaction(formData) {
-    const temporaryTransaction = createTemporaryTransaction(formData);
+    const response = await fetch("/api/transactions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-    setIsFormOpen(false);
-
-    try {
-      await mutateTransactionsCache(
-        fetch("/api/transactions", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }).then((response) => {
-          if (!response.ok) throw new Error("Database error saving transaction.");
-          return response.json();
-        }),
-        {
-          optimisticData: getOptimisticState(cachedTransactionsPayload, temporaryTransaction),
-          populateCache: (savedTransaction, currentCache) =>
-            getFinalizedCacheState(savedTransaction, currentCache, temporaryTransaction._id),
-          rollbackOnError: true,
-          revalidate: false,
-        }
-      );
-    } catch (error) {
-      console.error("Network error saving transaction:", error);
-      alert("Failed to submit transaction. UI state rolled back.");
+    if (response.ok) {
+      mutateTransactionsCache();
+      setIsFormOpen(false);
     }
   }
 
@@ -131,6 +84,8 @@ export default function TransactionsPage() {
         )}
 
         <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
+
+        {transactionsError && <p>Could not load transactions. Please try again.</p>}
 
         {isTransactionsLoading ? (
           <TransactionsSkeleton />
