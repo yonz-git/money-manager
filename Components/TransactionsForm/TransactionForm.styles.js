@@ -109,6 +109,12 @@ export const RadioDot = styled.span`
   background-color: #fff;
 `;
 
+export const RadioGroup = styled.div`
+  display: flex;
+  gap: 32px;
+  margin-top: 8px;
+`;
+
 export const DateWrapper = styled.div`
   position: relative;
   display: flex;
@@ -159,4 +165,16 @@ export const ErrorText = styled.p`
   font-size: 12px;
   color: #e74c3c;
   font-weight: 500;
+`;
+
+export const VisuallyHiddenInput = styled.input`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 `;

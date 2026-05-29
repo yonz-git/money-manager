@@ -11,6 +11,8 @@ import {
   RadioLabel,
   RadioCircle,
   RadioDot,
+  RadioGroup,
+  VisuallyHiddenInput,
   SubmitButton,
   ErrorText,
 } from "./TransactionForm.styles";
@@ -150,29 +152,28 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
           {errors.category && <ErrorText>{errors.category}</ErrorText>}
         </Field>
 
-        <Field>
-          <LabelText as="span">Transaction Type *</LabelText>
-          <div style={{ display: "flex", gap: "32px", marginTop: "8px" }}>
-            {["Income", "Expense"].map((val) => (
-              <RadioLabel key={val} htmlFor={`type-${val}`}>
-                <RadioCircle $checked={type === val} $value={val}>
-                  {type === val && <RadioDot />}
+        <fieldset>
+          <legend>Transaction Type *</legend>
+          <RadioGroup>
+            {["Income", "Expense"].map((transactionType) => (
+              <RadioLabel key={transactionType} htmlFor={`type-${transactionType}`}>
+                <RadioCircle $checked={type === transactionType} $value={transactionType}>
+                  {type === transactionType && <RadioDot />}
                 </RadioCircle>
-                <input
-                  id={`type-${val}`}
+                <VisuallyHiddenInput
+                  id={`type-${transactionType}`}
                   name="transactionType"
                   type="radio"
-                  value={val}
-                  checked={type === val}
+                  value={transactionType}
+                  checked={type === transactionType}
                   onChange={(event) => setType(event.target.value)}
-                  style={{ display: "none" }}
                 />
-                {val}
+                {transactionType}
               </RadioLabel>
             ))}
-          </div>
+          </RadioGroup>
           {errors.type && <ErrorText>{errors.type}</ErrorText>}
-        </Field>
+        </fieldset>
 
         <Field>
           <LabelText htmlFor="date">Transaction Date *</LabelText>
