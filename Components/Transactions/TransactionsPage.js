@@ -1,49 +1,78 @@
-import React, { useMemo, useState } from 'react';
-import useSWR from 'swr';
-import TransactionsHeader from './TransactionsHeader';
-import TransactionsControls from './TransactionsControls';
-import TransactionsList from './TransactionsList';
-import TransactionsSkeleton from './TransactionsSkeleton';
-import TransactionsEmptyState from './TransactionsEmptyState';
-import AccountBalance from './AccountBalance'; 
-import { PageWrapper, Content, FooterText } from './transactions.styles';
+import { useState } from "react";
+import useSWR from "swr";
+import TransactionsHeader from "./TransactionsHeader";
+import TransactionsControls from "./TransactionsControls";
+import TransactionsList from "./TransactionsList";
+import TransactionsSkeleton from "./TransactionsSkeleton";
+import TransactionsEmptyState from "./TransactionsEmptyState";
+import TransactionForm from "../TransactionsForm/TransactionsForm";
+import { PageWrapper, Content, FormWrapper } from "./transactions.styles";
 
-const fetcher = (url) => fetch(url).then((res) => {
-  if (!res.ok) throw new Error('Failed to fetch transaction stream.');
-  return res.json();
-});
+async function fetcher(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Network error");
+  return response.json();
+}
 
 export default function TransactionsPage() {
-  const [sortBy, setSortBy] = useState('Newest');
+  const [sortBy, setSortBy] = useState("Newest");
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const { data, error, isLoading } = useSWR('/api/transactions', fetcher);
+  const {
+    data: transactionsData,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR("/api/transactions", fetcher);
 
- 
-  const transactions = useMemo(() => {
-    if (!data) return [];
-    return Array.isArray(data) ? data : data.transactions || [];
-  }, [data]);
+  const { data: categoriesData } = useSWR("/api/category", fetcher);
 
- 
-  const sortedTransactions = useMemo(() => {
-    if (!data) return [];
-    let rawTransactions = Array.isArray(data) ? data : data.transactions || [];
-    let sortedData = [...rawTransactions]; 
+  const transactionsList = transactionsData
+    ? Array.isArray(transactionsData)
+      ? transactionsData
+      : transactionsData.transactions ?? []
+    : [];
 
-    if (sortBy === 'Newest') {
-      sortedData.sort((a, b) => new Date(b.date) - new Date(a.date));
-    } else if (sortBy === 'Oldest') {
-      sortedData.sort((a, b) => new Date(a.date) - new Date(b.date));
-    } else if (sortBy === 'AmountHigh') {
-      sortedData.sort((a, b) => b.amount - a.amount);
-    } else if (sortBy === 'AmountLow') {
-      sortedData.sort((a, b) => a.amount - b.amount);
+  const categoriesList = Array.isArray(categoriesData)
+    ? categoriesData
+    : [];
+
+  function handleToggleForm() {
+    setIsFormOpen(!isFormOpen);
+  }
+
+  function getSortedTransactions() {
+    if (transactionsList.length === 0) return [];
+    const transactionsClone = [...transactionsList];
+
+    if (sortBy === "Newest") {
+      transactionsClone.sort((a, b) => b.date.localeCompare(a.date));
+    } else if (sortBy === "Oldest") {
+      transactionsClone.sort((a, b) => a.date.localeCompare(b.date));
+    } else if (sortBy === "AmountHigh") {
+      transactionsClone.sort((a, b) => b.amount - a.amount);
+    } else if (sortBy === "AmountLow") {
+      transactionsClone.sort((a, b) => a.amount - b.amount);
     }
 
-    return sortedData;
-  }, [data, sortBy]);
+    return transactionsClone;
+  }
 
-  const showEmpty = !isLoading && sortedTransactions.length === 0;
+  const sortedTransactions = getSortedTransactions();
+  const shouldShowEmptyState = !isLoading && sortedTransactions.length === 0;
+
+  async function handleAddTransaction(formData) {
+    const response = await fetch("/api/transactions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      mutate();
+      setIsFormOpen(false);
+    }
+  }
 
 
   if (error) {
@@ -63,24 +92,27 @@ export default function TransactionsPage() {
 
   return (
     <PageWrapper>
-      <TransactionsHeader />
+      <TransactionsHeader isFormOpen={isFormOpen} onToggleForm={handleToggleForm} />
       <Content>
-       
-        <AccountBalance transactions={transactions} />
+        {isFormOpen && (
+          <FormWrapper>
+            <TransactionForm
+              onAddTransaction={handleAddTransaction}
+              categoriesData={categoriesList}
+            />
+          </FormWrapper>
+        )}
 
-        <TransactionsControls 
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-        />
+        <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
+
+        {error && <p>Could not load transactions. Please try again.</p>}
 
         {isLoading ? (
           <TransactionsSkeleton />
-        ) : showEmpty ? (
+        ) : shouldShowEmptyState ? (
           <TransactionsEmptyState />
         ) : (
-          <>
-            <TransactionsList transactions={sortedTransactions} />
-          </>
+          <TransactionsList transactions={sortedTransactions} />
         )}
       </Content>
     </PageWrapper>
