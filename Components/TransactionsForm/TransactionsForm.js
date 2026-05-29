@@ -38,9 +38,9 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
   const [errors, setErrors] = useState({});
 
   function handleAmountChange(event) {
-    const val = event.target.value;
-    if (val === "" || /^\d*\.?\d{0,2}$/.test(val)) {
-      setFormData({ ...formData, amount: val });
+    const value = event.target.value;
+    if (value === "" || /^\d*\.?\d{0,2}$/.test(value)) {
+      setFormData({ ...formData, amount: value });
     }
   }
 
@@ -53,15 +53,15 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
   function handleSubmit(event) {
     event.preventDefault();
 
-    const errs = {};
-    if (!formData.title || formData.title.trim() === "") errs.title = "Title description is required.";
-    if (!formData.amount || isNaN(formData.amount) || Number(formData.amount) <= 0) errs.amount = "Amount must be greater than 0.";
-    if (!formData.category) errs.category = "Please select a transaction category.";
-    if (!formData.type) errs.type = "Please select Income or Expense.";
-    if (!formData.date) errs.date = "Transaction Date is required.";
+    const validationErrors = {};
+    if (!formData.title || formData.title.trim() === "") validationErrors.title = "Title description is required.";
+    if (!formData.amount || isNaN(formData.amount) || Number(formData.amount) <= 0) validationErrors.amount = "Amount must be greater than 0.";
+    if (!formData.category) validationErrors.category = "Please select a transaction category.";
+    if (!formData.type) validationErrors.type = "Please select Income or Expense.";
+    if (!formData.date) validationErrors.date = "Transaction Date is required.";
 
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 

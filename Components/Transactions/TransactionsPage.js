@@ -8,7 +8,7 @@ import TransactionsEmptyState from "./TransactionsEmptyState";
 import TransactionForm from "../TransactionsForm/TransactionsForm";
 import { PageWrapper, Content, FormWrapper } from "./transactions.styles";
 
-async function apiFetcher(url) {
+async function fetcher(url) {
   const response = await fetch(url);
   if (!response.ok) throw new Error("Network error");
   return response.json();
@@ -19,22 +19,22 @@ export default function TransactionsPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const {
-    data: cachedTransactionsPayload,
-    error: transactionsError,
-    isLoading: isTransactionsLoading,
-    mutate: mutateTransactionsCache,
-  } = useSWR("/api/transactions", apiFetcher);
+    data: transactionsData,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR("/api/transactions", fetcher);
 
-  const { data: cachedCategoriesPayload } = useSWR("/api/category", apiFetcher);
+  const { data: categoriesData } = useSWR("/api/category", fetcher);
 
-  const transactionsList = cachedTransactionsPayload
-    ? Array.isArray(cachedTransactionsPayload)
-      ? cachedTransactionsPayload
-      : cachedTransactionsPayload.transactions ?? []
+  const transactionsList = transactionsData
+    ? Array.isArray(transactionsData)
+      ? transactionsData
+      : transactionsData.transactions ?? []
     : [];
 
-  const categoriesList = Array.isArray(cachedCategoriesPayload)
-    ? cachedCategoriesPayload
+  const categoriesList = Array.isArray(categoriesData)
+    ? categoriesData
     : [];
 
   function handleToggleForm() {
@@ -59,7 +59,7 @@ export default function TransactionsPage() {
   }
 
   const sortedTransactions = getSortedTransactions();
-  const shouldShowEmptyState = !isTransactionsLoading && sortedTransactions.length === 0;
+  const shouldShowEmptyState = !isLoading && sortedTransactions.length === 0;
 
   async function handleAddTransaction(formData) {
     const response = await fetch("/api/transactions", {
@@ -69,7 +69,7 @@ export default function TransactionsPage() {
     });
 
     if (response.ok) {
-      mutateTransactionsCache();
+      mutate();
       setIsFormOpen(false);
     }
   }
@@ -89,9 +89,9 @@ export default function TransactionsPage() {
 
         <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
 
-        {transactionsError && <p>Could not load transactions. Please try again.</p>}
+        {error && <p>Could not load transactions. Please try again.</p>}
 
-        {isTransactionsLoading ? (
+        {isLoading ? (
           <TransactionsSkeleton />
         ) : shouldShowEmptyState ? (
           <TransactionsEmptyState />
