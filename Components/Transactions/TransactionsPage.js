@@ -37,6 +37,10 @@ export default function TransactionsPage() {
     ? cachedCategoriesPayload
     : [];
 
+  function handleToggleForm() {
+    setIsFormOpen(!isFormOpen);
+  }
+
   function getSortedTransactions() {
     if (transactionsList.length === 0) return [];
     const transactionsClone = [...transactionsList];
@@ -72,7 +76,7 @@ export default function TransactionsPage() {
 
   return (
     <PageWrapper>
-      <TransactionsHeader isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} />
+      <TransactionsHeader isFormOpen={isFormOpen} onToggleForm={handleToggleForm} />
       <Content>
         {isFormOpen && (
           <div style={{ marginBottom: "20px", width: "100%" }}>
