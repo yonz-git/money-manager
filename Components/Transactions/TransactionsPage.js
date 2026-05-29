@@ -74,6 +74,22 @@ export default function TransactionsPage() {
     }
   }
 
+
+  if (error) {
+    return (
+      <PageWrapper>
+        <Content>
+          <div className="p-4 my-6 bg-red-50 border border-red-200 rounded-lg text-center">
+            <h2 className="text-red-800 font-semibold mb-1">Database Sync Error</h2>
+            <p className="text-sm text-red-600">
+              We are unable to load your accounts right now. Please try again later.
+            </p>
+          </div>
+        </Content>
+      </PageWrapper>
+    );
+  }
+
   return (
     <PageWrapper>
       <TransactionsHeader isFormOpen={isFormOpen} onToggleForm={handleToggleForm} />
