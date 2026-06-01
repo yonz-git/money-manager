@@ -38,6 +38,7 @@ export default function TransactionsPage() {
 
   function handleToggleForm() {
     setIsFormOpen(!isFormOpen);
+    setEditingTransaction(null);
   }
 
   function getSortedTransactions() {
