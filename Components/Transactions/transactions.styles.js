@@ -284,6 +284,8 @@ export const DeleteModalButton = styled.button`
   &:hover {
     opacity: 0.9;
   }
+  `;
+
 export const BalanceCard = styled.div`
   width: 100%;
   max-width: 28rem;
