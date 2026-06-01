@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardLeft, IconBox, CardTitle, CardMeta, Amount } from './transactions.styles';
+import { Card, CardLeft, IconBox, CardTitle, CardMeta, Amount, EditButton } from './transactions.styles';
 
 function getIcon(category) {
   const map = {
@@ -21,7 +21,7 @@ function getIcon(category) {
   return map[category] || '•';
 }
 
-export default function TransactionCard({ transaction }) {
+export default function TransactionCard({ transaction, onEdit }) {
 
   const isIncome = transaction.amount >= 0;
 
@@ -45,6 +45,9 @@ export default function TransactionCard({ transaction }) {
           maximumFractionDigits: 2
         }).format(Math.abs(transaction.amount))}
       </Amount>
+      <EditButton type="button" onClick={onEdit}>
+        ✏️
+      </EditButton>
     </Card>
   );
 }

@@ -2,11 +2,15 @@ import React from 'react';
 import TransactionCard from './TransactionCard';
 import { ListWrapper } from './transactions.styles';
 
-export default function TransactionsList({ transactions }) {
+export default function TransactionsList({ transactions, onEditTransaction }) {
   return (
     <ListWrapper>
       {transactions.map((transactionItem) => (
-        <TransactionCard key={transactionItem._id} transaction={transactionItem} />
+        <TransactionCard
+         key={transactionItem._id}
+          transaction={transactionItem} 
+          onEdit={() => onEditTransaction(transactionItem)}
+          />
       ))}
     </ListWrapper>
   );
