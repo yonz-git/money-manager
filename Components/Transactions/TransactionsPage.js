@@ -6,6 +6,7 @@ import TransactionsList from "./TransactionsList";
 import TransactionsSkeleton from "./TransactionsSkeleton";
 import TransactionsEmptyState from "./TransactionsEmptyState";
 import TransactionForm from "../TransactionsForm/TransactionsForm";
+import AccountBalance from "./AccountBalance"; 
 import { PageWrapper, Content, FormWrapper } from "./transactions.styles";
 
 async function fetcher(url) {
@@ -46,13 +47,21 @@ export default function TransactionsPage() {
     const transactionsClone = [...transactionsList];
 
     if (sortBy === "Newest") {
-      transactionsClone.sort((a, b) => b.date.localeCompare(a.date));
+      transactionsClone.sort(function(a, b) {
+        return b.date.localeCompare(a.date);
+      });
     } else if (sortBy === "Oldest") {
-      transactionsClone.sort((a, b) => a.date.localeCompare(b.date));
+      transactionsClone.sort(function(a, b) {
+        return a.date.localeCompare(b.date);
+      });
     } else if (sortBy === "AmountHigh") {
-      transactionsClone.sort((a, b) => b.amount - a.amount);
+      transactionsClone.sort(function(a, b) {
+        return b.amount - a.amount;
+      });
     } else if (sortBy === "AmountLow") {
-      transactionsClone.sort((a, b) => a.amount - b.amount);
+      transactionsClone.sort(function(a, b) {
+        return a.amount - b.amount;
+      });
     }
 
     return transactionsClone;
@@ -87,10 +96,13 @@ export default function TransactionsPage() {
           </FormWrapper>
         )}
 
+      
+        <AccountBalance transactions={transactionsList} />
+
         <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
 
-        {error && <p>Could not load transactions. Please try again.</p>}
-
+  
+        {error && <p className="text-red-500 text-center">Could not load transactions. Please try again later.</p>}
         {isLoading ? (
           <TransactionsSkeleton />
         ) : shouldShowEmptyState ? (
