@@ -220,11 +220,32 @@ export const BalanceLabel = styled.p`
   margin-bottom: 0.25rem;
 `;
 
-export const BalanceValue = styled.h1`
+export const BalanceValue = styled.p`
   font-size: 1.875rem;
   font-weight: 700;
   letter-spacing: -0.025em;
   margin: 0;
+`;
+
+const ErrorContainer = styled.div`
+  padding: 16px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  text-align: center;
+`;
+
+const ErrorTitle = styled.p`
+  color: #991b1b;
+  font-weight: 600;
+  margin-bottom: 4px;
+`;
+
+const ErrorMessage = styled.p`
+  font-size: 14px;
+  color: #dc2626;
 `;
 
 
