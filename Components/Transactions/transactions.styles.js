@@ -227,7 +227,7 @@ export const BalanceValue = styled.p`
   margin: 0;
 `;
 
-const ErrorContainer = styled.div`
+export const ErrorContainer = styled.div`
   padding: 16px;
   margin-top: 24px;
   margin-bottom: 24px;
@@ -237,13 +237,13 @@ const ErrorContainer = styled.div`
   text-align: center;
 `;
 
-const ErrorTitle = styled.p`
+export const ErrorTitle = styled.p`
   color: #991b1b;
   font-weight: 600;
   margin-bottom: 4px;
 `;
 
-const ErrorMessage = styled.p`
+export const ErrorMessage = styled.p`
   font-size: 14px;
   color: #dc2626;
 `;
