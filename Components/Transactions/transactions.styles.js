@@ -186,7 +186,7 @@ export const ToggleButton = styled.button`
   align-items: center;
   justify-content: center;
   transition:
-    opacity,
+    opacity 0.2s ease,
     transform 0.2s ease;
   padding: 0;
 `;
