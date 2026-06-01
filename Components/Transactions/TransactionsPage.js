@@ -30,12 +30,10 @@ export default function TransactionsPage() {
   const transactionsList = transactionsData
     ? Array.isArray(transactionsData)
       ? transactionsData
-      : transactionsData.transactions ?? []
+      : (transactionsData.transactions ?? [])
     : [];
 
-  const categoriesList = Array.isArray(categoriesData)
-    ? categoriesData
-    : [];
+  const categoriesList = Array.isArray(categoriesData) ? categoriesData : [];
 
   function handleToggleForm() {
     setIsFormOpen(!isFormOpen);
@@ -76,7 +74,10 @@ export default function TransactionsPage() {
 
   return (
     <PageWrapper>
-      <TransactionsHeader isFormOpen={isFormOpen} onToggleForm={handleToggleForm} />
+      <TransactionsHeader
+        isFormOpen={isFormOpen}
+        onToggleForm={handleToggleForm}
+      />
       <Content>
         {isFormOpen && (
           <FormWrapper>
@@ -96,7 +97,10 @@ export default function TransactionsPage() {
         ) : shouldShowEmptyState ? (
           <TransactionsEmptyState />
         ) : (
-          <TransactionsList transactions={sortedTransactions} />
+          <TransactionsList
+            transactions={sortedTransactions}
+            onDeleteSuccess={mutate}
+          />
         )}
       </Content>
     </PageWrapper>

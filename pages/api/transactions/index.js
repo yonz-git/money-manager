@@ -14,21 +14,43 @@ export default async function handler(request, response) {
     if (request.method === "POST") {
       const { amount, title, category, date, type } = request.body;
 
-      const finalAmount = type === "Expense" ? -Math.abs(Number(amount)) : Math.abs(Number(amount));
+      const finalAmount =
+        type === "Expense"
+          ? -Math.abs(Number(amount))
+          : Math.abs(Number(amount));
 
       const newTransaction = await Transaction.create({
         amount: finalAmount,
         title: title || category,
         category: category,
-        date: new Date(date)
+        date: new Date(date),
       });
 
       response.status(201).json(newTransaction);
       return;
     }
 
+    if (request.method === "DELETE") {
+      const { id } = request.query;
+
+      if (!id) {
+        response
+          .status(400)
+          .json({ status: "Bad Request: Missing transaction ID." });
+        return;
+      }
+
+      await Transaction.findByIdAndDelete(id);
+      response
+        .status(200)
+        .json({ status: "Transaction successfully deleted." });
+      return;
+    }
+
     response.status(405).json({ status: "Method not allowed." });
   } catch (error) {
-    response.status(500).json({ status: "Database error.", error: error.message });
+    response
+      .status(500)
+      .json({ status: "Database error.", error: error.message });
   }
 }

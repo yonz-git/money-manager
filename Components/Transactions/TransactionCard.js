@@ -35,9 +35,29 @@ function getIcon(category) {
   return map[category] || "•";
 }
 
-export default function TransactionCard({ transaction }) {
+export default function TransactionCard({ transaction, onDeleteSuccess }) {
   const isIncome = transaction.amount >= 0;
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  async function handleDelete() {
+    try {
+      const response = await fetch(`/api/transactions?id=${transaction._id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setIsDeleteModalOpen(false);
+
+        if (onDeleteSuccess) {
+          onDeleteSuccess();
+        }
+      } else {
+        console.error("Failed to delete.");
+      }
+    } catch (error) {
+      console.error("Error encountered while deleting:", error);
+    }
+  }
 
   return (
     <Card>
@@ -86,7 +106,11 @@ export default function TransactionCard({ transaction }) {
               Are you sure you want to permanently delete this transaction?
             </DeleteConfirmationMessage>
             <DeleteModalButtonContainer>
-              <DeleteModalButton type="button" $variant="destructive">
+              <DeleteModalButton
+                type="button"
+                $variant="destructive"
+                onClick={handleDelete}
+              >
                 Confirm
               </DeleteModalButton>
               <DeleteModalButton
