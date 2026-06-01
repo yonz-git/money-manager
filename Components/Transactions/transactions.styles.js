@@ -249,3 +249,10 @@ export const ErrorMessage = styled.p`
 `;
 
 
+export const EditButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+`;
