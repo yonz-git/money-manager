@@ -186,13 +186,8 @@ export const ToggleButton = styled.button`
   align-items: center;
   justify-content: center;
   transition:
-<<<<<<< HEAD
     opacity 0.3s ease,
     transform 0.3s ease;
-=======
-    opacity 0.2s ease,
-    transform 0.2s ease;
->>>>>>> 7cd93eb856e52f16c968bdc7a827089e26fc5391
   padding: 0;
 `;
 
@@ -289,4 +284,65 @@ export const DeleteModalButton = styled.button`
   &:hover {
     opacity: 0.9;
   }
+export const BalanceCard = styled.div`
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto 1.5rem auto;
+  padding: 1.5rem;
+  border: 1px solid;
+  border-radius: 0.75rem;
+  text-align: center;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+
+
+  color: ${props => props.$balance > 0 ? '#16a34a' : props.$balance < 0 ? '#dc2626' : '#6b7280'};
+  border-color: ${props => props.$balance > 0 ? '#22c55e' : props.$balance < 0 ? '#ef4444' : '#d1d5db'};
+  background-color: ${props => props.$balance > 0 ? '#f0fdf4' : props.$balance < 0 ? '#fef2f2' : '#f9fafb'};
+`;
+
+export const BalanceLabel = styled.p`
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+`;
+
+export const BalanceValue = styled.p`
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin: 0;
+`;
+
+export const ErrorContainer = styled.div`
+  padding: 16px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  text-align: center;
+`;
+
+export const ErrorTitle = styled.p`
+  color: #991b1b;
+  font-weight: 600;
+  margin-bottom: 4px;
+`;
+
+export const ErrorMessage = styled.p`
+  font-size: 14px;
+  color: #dc2626;
+`;
+
+
+export const EditButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
 `;

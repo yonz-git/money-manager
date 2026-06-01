@@ -6,7 +6,8 @@ import TransactionsList from "./TransactionsList";
 import TransactionsSkeleton from "./TransactionsSkeleton";
 import TransactionsEmptyState from "./TransactionsEmptyState";
 import TransactionForm from "../TransactionsForm/TransactionsForm";
-import { PageWrapper, Content, FormWrapper } from "./transactions.styles";
+import AccountBalance from "./AccountBalance"; 
+import { PageWrapper, Content, FormWrapper,ErrorContainer,ErrorTitle,ErrorMessage } from "./transactions.styles";
 
 async function fetcher(url) {
   const response = await fetch(url);
@@ -17,6 +18,7 @@ async function fetcher(url) {
 export default function TransactionsPage() {
   const [sortBy, setSortBy] = useState("Newest");
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState(null);
 
   const {
     data: transactionsData,
@@ -37,6 +39,7 @@ export default function TransactionsPage() {
 
   function handleToggleForm() {
     setIsFormOpen(!isFormOpen);
+    setEditingTransaction(null);
   }
 
   function getSortedTransactions() {
@@ -44,13 +47,21 @@ export default function TransactionsPage() {
     const transactionsClone = [...transactionsList];
 
     if (sortBy === "Newest") {
-      transactionsClone.sort((a, b) => b.date.localeCompare(a.date));
+      transactionsClone.sort(function(a, b) {
+        return b.date.localeCompare(a.date);
+      });
     } else if (sortBy === "Oldest") {
-      transactionsClone.sort((a, b) => a.date.localeCompare(b.date));
+      transactionsClone.sort(function(a, b) {
+        return a.date.localeCompare(b.date);
+      });
     } else if (sortBy === "AmountHigh") {
-      transactionsClone.sort((a, b) => b.amount - a.amount);
+      transactionsClone.sort(function(a, b) {
+        return b.amount - a.amount;
+      });
     } else if (sortBy === "AmountLow") {
-      transactionsClone.sort((a, b) => a.amount - b.amount);
+      transactionsClone.sort(function(a, b) {
+        return a.amount - b.amount;
+      });
     }
 
     return transactionsClone;
@@ -72,6 +83,32 @@ export default function TransactionsPage() {
     }
   }
 
+  function handleEditTransaction(transaction) {
+    setEditingTransaction(transaction);
+    setIsFormOpen(false);
+  }
+
+  function handleCancelEdit() {
+    setEditingTransaction(null);
+  }
+
+  async function handleUpdateTransaction(formData) {
+    const response = await fetch(
+      `/api/transactions/${editingTransaction._id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (response.ok) {
+      mutate();
+      // close the edit form after successful save
+      setEditingTransaction(null);
+    }
+  }
+
   return (
     <PageWrapper>
       <TransactionsHeader
@@ -79,18 +116,36 @@ export default function TransactionsPage() {
         onToggleForm={handleToggleForm}
       />
       <Content>
+        
+       
+        {error && (
+          <ErrorContainer>
+            <ErrorTitle>Database Sync Error</ErrorTitle>
+            <ErrorMessage>
+              We are unable to load your accounts right now. Please try again later.
+            </ErrorMessage>
+          </ErrorContainer>
+        )}
+
         {isFormOpen && (
           <FormWrapper>
             <TransactionForm
-              onAddTransaction={handleAddTransaction}
+              onSaveTransaction={handleAddTransaction}
               categoriesData={categoriesList}
             />
           </FormWrapper>
         )}
 
+        {editingTransaction && (
+          <TransactionForm
+            onSaveTransaction={handleUpdateTransaction}
+            categoriesData={categoriesList}
+            initialData={editingTransaction}
+            onCancel={handleCancelEdit}
+          />
+        )}
+         <AccountBalance transactions={transactionsList} />
         <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
-
-        {error && <p>Could not load transactions. Please try again.</p>}
 
         {isLoading ? (
           <TransactionsSkeleton />
@@ -99,7 +154,8 @@ export default function TransactionsPage() {
         ) : (
           <TransactionsList
             transactions={sortedTransactions}
-            onDeleteSuccess={mutate}
+            onEditTransaction={handleEditTransaction}
+onEditTransaction={handleEditTransaction}
           />
         )}
       </Content>

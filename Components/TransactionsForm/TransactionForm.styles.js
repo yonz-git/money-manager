@@ -146,3 +146,8 @@ export const VisuallyHiddenInput = styled.input`
   white-space: nowrap;
   border: 0;
 `;
+
+export const ButtonRow = styled.div`
+  display: flex;
+  gap: 12px;
+`;

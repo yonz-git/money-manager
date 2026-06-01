@@ -35,7 +35,7 @@ function getIcon(category) {
   return map[category] || "•";
 }
 
-export default function TransactionCard({ transaction, onDeleteSuccess }) {
+export default function TransactionCard({ transaction, onEdit, onDeleteSuccess }) {
   const isIncome = transaction.amount >= 0;
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -81,6 +81,9 @@ export default function TransactionCard({ transaction, onDeleteSuccess }) {
             maximumFractionDigits: 2,
           }).format(Math.abs(transaction.amount))}
         </Amount>
+     <EditButton type="button" onClick={onEdit} aria-label="Edittransaction">
+        ✏️
+      </EditButton>
 
         <DeleteButton
           type="button"
@@ -123,6 +126,8 @@ export default function TransactionCard({ transaction, onDeleteSuccess }) {
           </DeleteModalContainer>
         </DeleteModalOverlay>
       )}
+     
+ 
     </Card>
   );
 }
