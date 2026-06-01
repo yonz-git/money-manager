@@ -19,7 +19,6 @@ export default function TransactionsPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
 
-
   const {
     data: transactionsData,
     error,
@@ -32,12 +31,10 @@ export default function TransactionsPage() {
   const transactionsList = transactionsData
     ? Array.isArray(transactionsData)
       ? transactionsData
-      : transactionsData.transactions ?? []
+      : (transactionsData.transactions ?? [])
     : [];
 
-  const categoriesList = Array.isArray(categoriesData)
-    ? categoriesData
-    : [];
+  const categoriesList = Array.isArray(categoriesData) ? categoriesData : [];
 
   function handleToggleForm() {
     setIsFormOpen(!isFormOpen);
@@ -85,12 +82,15 @@ export default function TransactionsPage() {
     setEditingTransaction(null);
   }
 
-   async function handleUpdateTransaction(formData) {
-    const response = await fetch(`/api/transactions/${editingTransaction._id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+  async function handleUpdateTransaction(formData) {
+    const response = await fetch(
+      `/api/transactions/${editingTransaction._id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      }
+    );
 
     if (response.ok) {
       mutate();
@@ -101,26 +101,27 @@ export default function TransactionsPage() {
 
   return (
     <PageWrapper>
-      <TransactionsHeader isFormOpen={isFormOpen} onToggleForm={handleToggleForm} />
+      <TransactionsHeader
+        isFormOpen={isFormOpen}
+        onToggleForm={handleToggleForm}
+      />
       <Content>
         {isFormOpen && (
           <FormWrapper>
             <TransactionForm
-              onAddTransaction={handleAddTransaction}
+              onSaveTransaction={handleAddTransaction}
               categoriesData={categoriesList}
             />
           </FormWrapper>
         )}
 
         {editingTransaction && (
-          
-            <TransactionForm
-              onAddTransaction={handleUpdateTransaction}
-              categoriesData={categoriesList}
-              initialData={editingTransaction}
-              onCancel={handleCancelEdit}
-            />
-         
+          <TransactionForm
+            onSaveTransaction={handleUpdateTransaction}
+            categoriesData={categoriesList}
+            initialData={editingTransaction}
+            onCancel={handleCancelEdit}
+          />
         )}
         <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
 
@@ -132,8 +133,9 @@ export default function TransactionsPage() {
           <TransactionsEmptyState />
         ) : (
           <TransactionsList
-           transactions={sortedTransactions}
-           onEditTransaction={handleEditTransaction} />
+            transactions={sortedTransactions}
+            onEditTransaction={handleEditTransaction}
+          />
         )}
       </Content>
     </PageWrapper>

@@ -28,7 +28,7 @@ function getTodayDateString() {
 }
 
 export default function TransactionForm({
-  onAddTransaction,
+  onSaveTransaction,
   categoriesData = [],
   initialData,
   onCancel,
@@ -37,7 +37,7 @@ export default function TransactionForm({
     initialData
       ? {
           title: initialData.title || "",
-          amount: String(Math.abs(initialData.amount)) || "",
+          amount: String(Math.abs(initialData.amount)),
           category: initialData.category || "",
           type: initialData.amount >= 0 ? "Income" : "Expense",
           date: initialData.date
@@ -96,7 +96,7 @@ export default function TransactionForm({
     setErrors({});
 
     try {
-      await onAddTransaction({
+      await onSaveTransaction({
         title: formData.title.trim(),
         amount: Number(formData.amount),
         category: formData.category,
