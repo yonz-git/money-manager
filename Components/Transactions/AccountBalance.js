@@ -1,10 +1,9 @@
 import { BalanceCard, BalanceLabel, BalanceValue } from './transactions.styles';
 
 
-export default function AccountBalance(props) {
+export default function AccountBalance({transactions = [] }) {
   
   
-  const transactions = props.transactions || [];
 
   function calculateTotal(accumulator, currentTransaction) {
     const amount = Number(currentTransaction.amount) || 0;
