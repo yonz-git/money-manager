@@ -41,9 +41,7 @@ export default async function handler(request, response) {
       }
 
       await Transaction.findByIdAndDelete(id);
-      response
-        .status(200)
-        .json({ status: "Transaction successfully deleted." });
+      response.status(200).json({ status: "Successfully deleted." });
       return;
     }
 
