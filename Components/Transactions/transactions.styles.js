@@ -193,3 +193,11 @@ export const FormWrapper = styled.div`
   margin-bottom: 20px;
   width: 100%;
 `;
+
+export const EditButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+`;

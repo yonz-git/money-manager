@@ -17,6 +17,7 @@ async function fetcher(url) {
 export default function TransactionsPage() {
   const [sortBy, setSortBy] = useState("Newest");
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState(null);
 
   const {
     data: transactionsData,
@@ -30,15 +31,14 @@ export default function TransactionsPage() {
   const transactionsList = transactionsData
     ? Array.isArray(transactionsData)
       ? transactionsData
-      : transactionsData.transactions ?? []
+      : (transactionsData.transactions ?? [])
     : [];
 
-  const categoriesList = Array.isArray(categoriesData)
-    ? categoriesData
-    : [];
+  const categoriesList = Array.isArray(categoriesData) ? categoriesData : [];
 
   function handleToggleForm() {
     setIsFormOpen(!isFormOpen);
+    setEditingTransaction(null);
   }
 
   function getSortedTransactions() {
@@ -74,19 +74,56 @@ export default function TransactionsPage() {
     }
   }
 
+  function handleEditTransaction(transaction) {
+    setEditingTransaction(transaction);
+    setIsFormOpen(false);
+  }
+
+  function handleCancelEdit() {
+    setEditingTransaction(null);
+  }
+
+  async function handleUpdateTransaction(formData) {
+    const response = await fetch(
+      `/api/transactions/${editingTransaction._id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (response.ok) {
+      mutate();
+      // close the edit form after successful save
+      setEditingTransaction(null);
+    }
+  }
+
   return (
     <PageWrapper>
-      <TransactionsHeader isFormOpen={isFormOpen} onToggleForm={handleToggleForm} />
+      <TransactionsHeader
+        isFormOpen={isFormOpen}
+        onToggleForm={handleToggleForm}
+      />
       <Content>
         {isFormOpen && (
           <FormWrapper>
             <TransactionForm
-              onAddTransaction={handleAddTransaction}
+              onSaveTransaction={handleAddTransaction}
               categoriesData={categoriesList}
             />
           </FormWrapper>
         )}
 
+        {editingTransaction && (
+          <TransactionForm
+            onSaveTransaction={handleUpdateTransaction}
+            categoriesData={categoriesList}
+            initialData={editingTransaction}
+            onCancel={handleCancelEdit}
+          />
+        )}
         <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
 
         {error && <p>Could not load transactions. Please try again.</p>}
@@ -96,7 +133,10 @@ export default function TransactionsPage() {
         ) : shouldShowEmptyState ? (
           <TransactionsEmptyState />
         ) : (
-          <TransactionsList transactions={sortedTransactions} />
+          <TransactionsList
+            transactions={sortedTransactions}
+            onEditTransaction={handleEditTransaction}
+          />
         )}
       </Content>
     </PageWrapper>

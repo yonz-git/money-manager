@@ -1,3 +1,4 @@
+import DiscardDialog from "./DiscardDialog";
 import { useState } from "react";
 import {
   Card,
@@ -15,6 +16,7 @@ import {
   VisuallyHiddenInput,
   SubmitButton,
   ErrorText,
+  ButtonRow,
 } from "./TransactionForm.styles";
 
 function getTodayDateString() {
@@ -25,17 +27,35 @@ function getTodayDateString() {
   return `${year}-${month}-${day}`;
 }
 
-const initialFormData = {
-  title: "",
-  amount: "",
-  category: "",
-  type: "",
-  date: getTodayDateString(),
-};
-
-export default function TransactionForm({ onAddTransaction, categoriesData = [] }) {
-  const [formData, setFormData] = useState(initialFormData);
+export default function TransactionForm({
+  onSaveTransaction,
+  categoriesData = [],
+  initialData,
+  onCancel,
+}) {
+  const [formData, setFormData] = useState(
+    initialData
+      ? {
+          title: initialData.title || "",
+          amount: String(Math.abs(initialData.amount)),
+          category: initialData.category || "",
+          type: initialData.amount >= 0 ? "Income" : "Expense",
+          date: initialData.date
+            ? initialData.date.slice(0, 10)
+            : getTodayDateString(),
+        }
+      : {
+          title: "",
+          amount: "",
+          category: "",
+          type: "",
+          date: getTodayDateString(),
+        }
+  );
   const [errors, setErrors] = useState({});
+
+  const isEditMode = Boolean(initialData);
+  const [showDiscardDialog, setShowDiscardDialog] = useState(false);
 
   function handleAmountChange(event) {
     const value = event.target.value;
@@ -54,10 +74,18 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
     event.preventDefault();
 
     const validationErrors = {};
-    if (!formData.title || formData.title.trim() === "") validationErrors.title = "Title description is required.";
-    if (!formData.amount || isNaN(formData.amount) || Number(formData.amount) <= 0) validationErrors.amount = "Amount must be greater than 0.";
-    if (!formData.category) validationErrors.category = "Please select a transaction category.";
-    if (!formData.type) validationErrors.type = "Please select Income or Expense.";
+    if (!formData.title || formData.title.trim() === "")
+      validationErrors.title = "Title description is required.";
+    if (
+      !formData.amount ||
+      isNaN(formData.amount) ||
+      Number(formData.amount) <= 0
+    )
+      validationErrors.amount = "Amount must be greater than 0.";
+    if (!formData.category)
+      validationErrors.category = "Please select a transaction category.";
+    if (!formData.type)
+      validationErrors.type = "Please select Income or Expense.";
     if (!formData.date) validationErrors.date = "Transaction Date is required.";
 
     if (Object.keys(validationErrors).length > 0) {
@@ -68,22 +96,32 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
     setErrors({});
 
     try {
-      await onAddTransaction({
+      await onSaveTransaction({
         title: formData.title.trim(),
         amount: Number(formData.amount),
         category: formData.category,
         type: formData.type,
         date: formData.date,
       });
-      setFormData(initialFormData);
+      if (!isEditMode) {
+        setFormData({
+          title: "",
+          amount: "",
+          category: "",
+          type: "",
+          date: getTodayDateString(),
+        });
+      }
     } catch (error) {
-    setErrors({ submit: error.message });
-  }
+      setErrors({ submit: error.message });
+    }
   }
 
   return (
     <Card>
-      <Heading>Add New Transaction</Heading>
+      <Heading>
+        {isEditMode ? "Update Transaction" : "Add New Transaction"}
+      </Heading>
 
       <form onSubmit={handleSubmit} noValidate>
         <Field>
@@ -94,7 +132,9 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
             type="text"
             placeholder="e.g., Weekly Groceries"
             value={formData.title}
-            onChange={(event) => setFormData({ ...formData, title: event.target.value })}
+            onChange={(event) =>
+              setFormData({ ...formData, title: event.target.value })
+            }
             $hasError={!!errors.title}
           />
           {errors.title && <ErrorText>{errors.title}</ErrorText>}
@@ -125,7 +165,9 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
               id="category"
               name="category"
               value={formData.category}
-              onChange={(event) => setFormData({ ...formData, category: event.target.value })}
+              onChange={(event) =>
+                setFormData({ ...formData, category: event.target.value })
+              }
               $hasError={!!errors.category}
             >
               <option value="">Please select a category</option>
@@ -160,8 +202,14 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
           <legend>Transaction Type *</legend>
           <RadioGroup>
             {["Income", "Expense"].map((transactionType) => (
-              <RadioLabel key={transactionType} htmlFor={`type-${transactionType}`}>
-                <RadioCircle $checked={formData.type === transactionType} $value={transactionType}>
+              <RadioLabel
+                key={transactionType}
+                htmlFor={`type-${transactionType}`}
+              >
+                <RadioCircle
+                  $checked={formData.type === transactionType}
+                  $value={transactionType}
+                >
                   {formData.type === transactionType && <RadioDot />}
                 </RadioCircle>
                 <VisuallyHiddenInput
@@ -170,7 +218,9 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
                   type="radio"
                   value={transactionType}
                   checked={formData.type === transactionType}
-                  onChange={(event) => setFormData({ ...formData, type: event.target.value })}
+                  onChange={(event) =>
+                    setFormData({ ...formData, type: event.target.value })
+                  }
                 />
                 {transactionType}
               </RadioLabel>
@@ -186,13 +236,35 @@ export default function TransactionForm({ onAddTransaction, categoriesData = [] 
             name="date"
             type="date"
             value={formData.date}
-            onChange={(event) => setFormData({ ...formData, date: event.target.value })}
+            onChange={(event) =>
+              setFormData({ ...formData, date: event.target.value })
+            }
             $hasError={!!errors.date}
           />
           {errors.date && <ErrorText>{errors.date}</ErrorText>}
         </Field>
 
-        <SubmitButton type="submit">Add Transaction</SubmitButton>
+        {isEditMode ? (
+          <ButtonRow>
+            <SubmitButton type="submit">Save</SubmitButton>
+            <SubmitButton
+              type="button"
+              onClick={() => setShowDiscardDialog(true)}
+            >
+              Cancel
+            </SubmitButton>
+          </ButtonRow>
+        ) : (
+          <SubmitButton type="submit">Add Transaction</SubmitButton>
+        )}
+
+        {errors.submit && <ErrorText>{errors.submit}</ErrorText>}
+        {showDiscardDialog && (
+          <DiscardDialog
+            onDiscard={onCancel}
+            onKeepEditing={() => setShowDiscardDialog(false)}
+          />
+        )}
       </form>
     </Card>
   );
