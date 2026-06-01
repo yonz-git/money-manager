@@ -7,6 +7,7 @@ import {
   CardTitle,
   CardMeta,
   Amount,
+  EditButton,
   DeleteButton,
   DeleteModalOverlay,
   DeleteModalContainer,
