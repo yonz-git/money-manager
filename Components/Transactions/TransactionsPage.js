@@ -155,7 +155,7 @@ export default function TransactionsPage() {
           <TransactionsList
             transactions={sortedTransactions}
             onEditTransaction={handleEditTransaction}
-onEditTransaction={handleEditTransaction}
+onDeleteSuccess={mutate}
           />
         )}
       </Content>
