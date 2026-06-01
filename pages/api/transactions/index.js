@@ -30,21 +30,6 @@ export default async function handler(request, response) {
       return;
     }
 
-    if (request.method === "DELETE") {
-      const { id } = request.query;
-
-      if (!id) {
-        response
-          .status(400)
-          .json({ status: "Bad Request: Missing transaction ID." });
-        return;
-      }
-
-      await Transaction.findByIdAndDelete(id);
-      response.status(200).json({ status: "Successfully deleted." });
-      return;
-    }
-
     response.status(405).json({ status: "Method not allowed." });
   } catch (error) {
     response
