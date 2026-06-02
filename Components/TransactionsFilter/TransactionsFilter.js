@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FilterButton,
   FilterPanel,
@@ -8,6 +8,7 @@ import {
   FilterApplyButton,
   FilterClearButton,
   FilterWrapper,
+  FilterOverlay,
 } from "./TransactionsFilter.styles";
 
 export default function TransactionsFilter({
@@ -39,6 +40,20 @@ export default function TransactionsFilter({
     setIsOpen(false);
   }
 
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    }
+    if (isOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
   return (
     <FilterWrapper>
       <FilterButton
@@ -63,47 +78,50 @@ export default function TransactionsFilter({
       </FilterButton>
 
       {isOpen && (
-        <FilterPanel>
-          <FilterOption>
-            <FilterRadioLabel>
-              <input
-                type="radio"
-                name="categoryFilter"
-                value=""
-                checked={pendingFilter === null}
-                onChange={() => setPendingFilter(null)}
-              />
-              All Categories
-            </FilterRadioLabel>
-          </FilterOption>
+        <>
+          <FilterOverlay onClick={handleClose} />
+          <FilterPanel>
+            <FilterOption>
+              <FilterRadioLabel>
+                <input
+                  type="radio"
+                  name="categoryFilter"
+                  value=""
+                  checked={pendingFilter === null}
+                  onChange={() => setPendingFilter(null)}
+                />
+                All Categories
+              </FilterRadioLabel>
+            </FilterOption>
 
-          {categoriesList.map((item) => {
-            const key = item._id?.$oid ?? item._id ?? item.category;
-            return (
-              <FilterOption key={key}>
-                <FilterRadioLabel>
-                  <input
-                    type="radio"
-                    name="categoryFilter"
-                    value={item.category}
-                    checked={pendingFilter === item.category}
-                    onChange={() => setPendingFilter(item.category)}
-                  />
-                  {item.category}
-                </FilterRadioLabel>
-              </FilterOption>
-            );
-          })}
+            {categoriesList.map((item) => {
+              const key = item._id?.$oid ?? item._id ?? item.category;
+              return (
+                <FilterOption key={key}>
+                  <FilterRadioLabel>
+                    <input
+                      type="radio"
+                      name="categoryFilter"
+                      value={item.category}
+                      checked={pendingFilter === item.category}
+                      onChange={() => setPendingFilter(item.category)}
+                    />
+                    {item.category}
+                  </FilterRadioLabel>
+                </FilterOption>
+              );
+            })}
 
-          <FilterActions>
-            <FilterApplyButton type="button" onClick={handleApply}>
-              Apply
-            </FilterApplyButton>
-            <FilterClearButton type="button" onClick={handleClear}>
-              Clear
-            </FilterClearButton>
-          </FilterActions>
-        </FilterPanel>
+            <FilterActions>
+              <FilterApplyButton type="button" onClick={handleApply}>
+                Apply
+              </FilterApplyButton>
+              <FilterClearButton type="button" onClick={handleClear}>
+                Clear
+              </FilterClearButton>
+            </FilterActions>
+          </FilterPanel>
+        </>
       )}
     </FilterWrapper>
   );
