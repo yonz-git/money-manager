@@ -6,8 +6,15 @@ import TransactionsList from "./TransactionsList";
 import TransactionsSkeleton from "./TransactionsSkeleton";
 import TransactionsEmptyState from "./TransactionsEmptyState";
 import TransactionForm from "../TransactionsForm/TransactionsForm";
-import AccountBalance from "./AccountBalance"; 
-import { PageWrapper, Content, FormWrapper,ErrorContainer,ErrorTitle,ErrorMessage } from "./transactions.styles";
+import AccountBalance from "./AccountBalance";
+import {
+  PageWrapper,
+  Content,
+  FormWrapper,
+  ErrorContainer,
+  ErrorTitle,
+  ErrorMessage,
+} from "./transactions.styles";
 
 async function fetcher(url) {
   const response = await fetch(url);
@@ -47,19 +54,19 @@ export default function TransactionsPage() {
     const transactionsClone = [...transactionsList];
 
     if (sortBy === "Newest") {
-      transactionsClone.sort(function(a, b) {
+      transactionsClone.sort(function (a, b) {
         return b.date.localeCompare(a.date);
       });
     } else if (sortBy === "Oldest") {
-      transactionsClone.sort(function(a, b) {
+      transactionsClone.sort(function (a, b) {
         return a.date.localeCompare(b.date);
       });
     } else if (sortBy === "AmountHigh") {
-      transactionsClone.sort(function(a, b) {
+      transactionsClone.sort(function (a, b) {
         return b.amount - a.amount;
       });
     } else if (sortBy === "AmountLow") {
-      transactionsClone.sort(function(a, b) {
+      transactionsClone.sort(function (a, b) {
         return a.amount - b.amount;
       });
     }
@@ -116,13 +123,12 @@ export default function TransactionsPage() {
         onToggleForm={handleToggleForm}
       />
       <Content>
-        
-       
         {error && (
           <ErrorContainer>
             <ErrorTitle>Database Sync Error</ErrorTitle>
             <ErrorMessage>
-              We are unable to load your accounts right now. Please try again later.
+              We are unable to load your accounts right now. Please try again
+              later.
             </ErrorMessage>
           </ErrorContainer>
         )}
@@ -144,7 +150,7 @@ export default function TransactionsPage() {
             onCancel={handleCancelEdit}
           />
         )}
-         <AccountBalance transactions={transactionsList} />
+        <AccountBalance transactions={transactionsList} />
         <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
 
         {isLoading ? (
@@ -154,6 +160,7 @@ export default function TransactionsPage() {
         ) : (
           <TransactionsList
             transactions={sortedTransactions}
+            onDeleteSuccess={mutate}
             onEditTransaction={handleEditTransaction}
           />
         )}

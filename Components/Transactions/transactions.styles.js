@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 
 export const PageWrapper = styled.div`
   max-width: 420px;
@@ -88,7 +88,7 @@ export const CardMeta = styled.div`
 export const Amount = styled.div`
   font-size: 14px;
   font-weight: 600;
-  color: ${({ $income }) => ($income ? '#10b981' : '#ef4444')};
+  color: ${({ $income }) => ($income ? "#10b981" : "#ef4444")};
 `;
 
 export const FooterText = styled.div`
@@ -155,7 +155,7 @@ export const SkeletonLineWrap = styled.div`
 
 export const SkeletonLine = styled(SkeletonBlock)`
   height: 10px;
-  width: ${({ $w }) => $w || '100%'};
+  width: ${({ $w }) => $w || "100%"};
 `;
 
 export const SkeletonAmount = styled(SkeletonBlock)`
@@ -164,34 +164,154 @@ export const SkeletonAmount = styled(SkeletonBlock)`
 `;
 
 export const ListWrapper = styled.div`
-  max-height: 70vh;       
-  overflow-y: auto;        
- overflow-x: hidden;     
-  padding-right: 6px;     
+  max-height: 70vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
   display: flex;
   flex-direction: column;
-  gap: 12px;    
-`;  
+  gap: 12px;
+`;
 
 export const ToggleButton = styled.button`
   width: 36px;
   height: 36px;
   border-radius: 50%;
   border: 1px solid #1a1a1a;
-  background: ${({ $isOpen }) => ($isOpen ? '#f5f5f5' : 'none')};
+  background: ${({ $isOpen }) => ($isOpen ? "#f5f5f5" : "none")};
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity, transform 0.2s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
   padding: 0;
 `;
 
 export const FormWrapper = styled.div`
   margin-bottom: 20px;
   width: 100%;
+`;
+
+export const Buttons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-left: 1rem;
+`;
+
+export const EditButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    color: #2f25c8;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+export const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666666;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    color: #8a0d0d;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+export const CardRight = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+`;
+
+export const DeleteModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+`;
+
+export const DeleteModalContainer = styled.div`
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+`;
+
+export const DeleteConfirmationMessage = styled.p`
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  color: #333333;
+  line-height: 1.5;
+`;
+
+export const DeleteModalButtonContainer = styled.div`
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+`;
+
+export const DeleteModalButton = styled.button`
+  padding: 10px 24px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    opacity 0.15s ease;
+
+  background-color: ${(props) =>
+    props.$variant === "destructive" ? "#ef4444" : "#e5e7eb"};
+  color: ${(props) =>
+    props.$variant === "destructive" ? "#ffffff" : "#1f2937"};
+
+  &:hover {
+    opacity: 0.9;
+  }
 `;
 
 export const BalanceCard = styled.div`
@@ -205,10 +325,24 @@ export const BalanceCard = styled.div`
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease-in-out;
 
-
-  color: ${props => props.$balance > 0 ? '#16a34a' : props.$balance < 0 ? '#dc2626' : '#6b7280'};
-  border-color: ${props => props.$balance > 0 ? '#22c55e' : props.$balance < 0 ? '#ef4444' : '#d1d5db'};
-  background-color: ${props => props.$balance > 0 ? '#f0fdf4' : props.$balance < 0 ? '#fef2f2' : '#f9fafb'};
+  color: ${(props) =>
+    props.$balance > 0
+      ? "#16a34a"
+      : props.$balance < 0
+        ? "#dc2626"
+        : "#6b7280"};
+  border-color: ${(props) =>
+    props.$balance > 0
+      ? "#22c55e"
+      : props.$balance < 0
+        ? "#ef4444"
+        : "#d1d5db"};
+  background-color: ${(props) =>
+    props.$balance > 0
+      ? "#f0fdf4"
+      : props.$balance < 0
+        ? "#fef2f2"
+        : "#f9fafb"};
 `;
 
 export const BalanceLabel = styled.p`
@@ -246,13 +380,4 @@ export const ErrorTitle = styled.p`
 export const ErrorMessage = styled.p`
   font-size: 14px;
   color: #dc2626;
-`;
-
-
-export const EditButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 4px;
 `;

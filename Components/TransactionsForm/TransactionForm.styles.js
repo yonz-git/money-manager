@@ -1,11 +1,11 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Card = styled.div`
   border: 1.5px solid #e0e0e0;
   border-radius: 10px;
   padding: 16px 18px 20px;
   background-color: #ffffff;
-  font-family: 'DM Sans', sans-serif;
+  font-family: "DM Sans", sans-serif;
   box-sizing: border-box;
   width: 100%;
 `;
@@ -39,14 +39,15 @@ export const InputElement = styled.input`
   background-color: #fff;
   box-sizing: border-box;
   outline: none;
-  border: ${props => props.$hasError ? '1.5px solid #e74c3c' : '1.5px solid #e0e0e0'};
+  border: ${(props) =>
+    props.$hasError ? "1.5px solid #e74c3c" : "1.5px solid #e0e0e0"};
 
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-  &[type=number] {
+  &[type="number"] {
     -moz-appearance: textfield;
   }
 `;
@@ -67,7 +68,8 @@ export const SelectElement = styled.select`
   outline: none;
   appearance: none;
   cursor: pointer;
-  border: ${props => props.$hasError ? '1.5px solid #e74c3c' : '1.5px solid #e0e0e0'};
+  border: ${(props) =>
+    props.$hasError ? "1.5px solid #e74c3c" : "1.5px solid #e0e0e0"};
 `;
 
 export const ChevronIcon = styled.span`
@@ -94,8 +96,8 @@ export const RadioCircle = styled.span`
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 1.5px solid ${props => props.$checked ? '#2ecc71' : '#ccc'};
-  background-color: ${props => props.$checked ? '#2ecc71' : 'transparent'};
+  border: 1.5px solid ${(props) => (props.$checked ? "#2ecc71" : "#ccc")};
+  background-color: ${(props) => (props.$checked ? "#2ecc71" : "transparent")};
   display: flex;
   align-items: center;
   justify-content: center;

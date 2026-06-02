@@ -14,13 +14,16 @@ export default async function handler(request, response) {
     if (request.method === "POST") {
       const { amount, title, category, date, type } = request.body;
 
-      const finalAmount = type === "Expense" ? -Math.abs(Number(amount)) : Math.abs(Number(amount));
+      const finalAmount =
+        type === "Expense"
+          ? -Math.abs(Number(amount))
+          : Math.abs(Number(amount));
 
       const newTransaction = await Transaction.create({
         amount: finalAmount,
         title: title || category,
         category: category,
-        date: new Date(date)
+        date: new Date(date),
       });
 
       response.status(201).json(newTransaction);
@@ -29,6 +32,8 @@ export default async function handler(request, response) {
 
     response.status(405).json({ status: "Method not allowed." });
   } catch (error) {
-    response.status(500).json({ status: "Database error.", error: error.message });
+    response
+      .status(500)
+      .json({ status: "Database error.", error: error.message });
   }
 }
