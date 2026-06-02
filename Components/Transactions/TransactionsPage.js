@@ -26,6 +26,7 @@ export default function TransactionsPage() {
   const [sortBy, setSortBy] = useState("Newest");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
+  const [activeFilter, setActiveFilter] = useState(null);
 
   const {
     data: transactionsData,
@@ -49,9 +50,16 @@ export default function TransactionsPage() {
     setEditingTransaction(null);
   }
 
-  function getSortedTransactions() {
+  function getSortedAndFilterTransactions() {
     if (transactionsList.length === 0) return [];
-    const transactionsClone = [...transactionsList];
+
+    let result = transactionsList;
+    if (activeFilter) {
+      result = transactionsList.filter(
+        (transaction) => transaction.category === activeFilter
+      );
+    }
+    const transactionsClone = [...result];
 
     if (sortBy === "Newest") {
       transactionsClone.sort(function (a, b) {
@@ -74,8 +82,12 @@ export default function TransactionsPage() {
     return transactionsClone;
   }
 
-  const sortedTransactions = getSortedTransactions();
+  const sortedTransactions = getSortedAndFilterTransactions();
   const shouldShowEmptyState = !isLoading && sortedTransactions.length === 0;
+
+  function handleApplyFilter(category) {
+    setActiveFilter(category);
+  }
 
   async function handleAddTransaction(formData) {
     const response = await fetch("/api/transactions", {
@@ -151,12 +163,19 @@ export default function TransactionsPage() {
           />
         )}
         <AccountBalance transactions={transactionsList} />
-        <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
+        <TransactionsControls
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          categoriesList={categoriesList}
+          activeFilter={activeFilter}
+          onApplyFilter={handleApplyFilter}
+          onClearFilter={() => setActiveFilter(null)}
+        />
 
         {isLoading ? (
           <TransactionsSkeleton />
         ) : shouldShowEmptyState ? (
-          <TransactionsEmptyState />
+          <TransactionsEmptyState isFiltered={activeFilter !== null} />
         ) : (
           <TransactionsList
             transactions={sortedTransactions}
