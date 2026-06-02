@@ -89,10 +89,6 @@ export default function TransactionsPage() {
     setActiveFilter(category);
   }
 
-  function handleClearFilter() {
-    setActiveFilter(null);
-  }
-
   async function handleAddTransaction(formData) {
     const response = await fetch("/api/transactions", {
       method: "POST",
@@ -173,7 +169,7 @@ export default function TransactionsPage() {
           categoriesList={categoriesList}
           activeFilter={activeFilter}
           onApplyFilter={handleApplyFilter}
-          onClearFilter={handleClearFilter}
+          onClearFilter={() => setActiveFilter(null)}
         />
 
         {isLoading ? (
