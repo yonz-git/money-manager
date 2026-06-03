@@ -3,6 +3,9 @@ import styled from "styled-components";
 export const TypeFilterWrapper = styled.div`
   position: relative;
   width: 100%;
+  border-right: 0.01px solid #bdbdbd;
+  border-radius: 4px;
+  margin-bottom: 2px;
 `;
 
 export const TypeFilterTrigger = styled.div`
@@ -74,7 +77,7 @@ export const TypeFilterOverlay = styled.div`
 
 export const TypeFilterPanel = styled.div`
   position: absolute;
-  top: 48px;
+  top: 40px;
   left: 0;
   right: 0;
   background: #fff;
