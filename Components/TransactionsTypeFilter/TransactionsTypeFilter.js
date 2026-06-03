@@ -56,7 +56,7 @@ export default function TransactionsTypeFilter({
     setIsOpen(false);
   }
 
-  // Klaus's suggestion
+  // Klaus's suggestion for the other filters
   useEffect(() => {
     function handleKeyDown(event) {
       if (event.key === "Escape") {
