@@ -1,6 +1,6 @@
 import React from "react";
 import TransactionCard from "./TransactionCard";
-import { ListWrapper, StackedItem, ScrollTrack } from "./transactions.styles";
+import { ListWrapper } from "./transactions.styles";
 
 export default function TransactionsList({
   transactions,
