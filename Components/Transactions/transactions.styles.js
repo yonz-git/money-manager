@@ -1,18 +1,20 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 
 export const PageWrapper = styled.div`
   max-width: 420px;
   margin: 0 auto;
   min-height: 100vh;
   background: #fff;
+  background: transparent !important;
   font-family: Arial, sans-serif;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
 `;
 
 export const Header = styled.header`
   display: flex;
+  position: relative;
   align-items: center;
-  justify-content: center; /* Centered since the menu icon is removed */
+  justify-content: center;
   padding: 14px 16px;
   border-bottom: 1px solid #e5e7eb;
 `;
@@ -21,10 +23,12 @@ export const Title = styled.h1`
   margin: 0;
   font-size: 18px;
   font-weight: 600;
+  color: aliceblue;
 `;
 
 export const Content = styled.div`
   padding: 16px;
+  background: transparent !important;
 `;
 
 export const ControlsRow = styled.div`
@@ -38,7 +42,7 @@ export const Dropdown = styled.select`
   height: 40px;
   border: 1px solid #bdbdbd;
   border-radius: 4px;
-  background: #fff;
+  background: #a499c4;
   padding: 0 10px;
   font-size: 14px;
   outline: none;
@@ -58,6 +62,7 @@ export const Card = styled.div`
   justify-content: space-between;
   align-items: center;
   background: #fff;
+  color: #fff;
 `;
 
 export const CardLeft = styled.div`
@@ -88,7 +93,7 @@ export const CardMeta = styled.div`
 export const Amount = styled.div`
   font-size: 14px;
   font-weight: 600;
-  color: ${({ $income }) => ($income ? '#10b981' : '#ef4444')};
+  color: ${({ $income }) => ($income ? "#10b981" : "#ef4444")};
 `;
 
 export const FooterText = styled.div`
@@ -155,7 +160,7 @@ export const SkeletonLineWrap = styled.div`
 
 export const SkeletonLine = styled(SkeletonBlock)`
   height: 10px;
-  width: ${({ $w }) => $w || '100%'};
+  width: ${({ $w }) => $w || "100%"};
 `;
 
 export const SkeletonAmount = styled(SkeletonBlock)`
@@ -164,29 +169,37 @@ export const SkeletonAmount = styled(SkeletonBlock)`
 `;
 
 export const ListWrapper = styled.div`
-  max-height: 70vh;       
-  overflow-y: auto;        
- overflow-x: hidden;     
-  padding-right: 6px;     
   display: flex;
   flex-direction: column;
-  gap: 12px;    
-`;  
+  gap: 16px;
+  width: 100%;
+
+  & > * {
+    background: #1c0069;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
+`;
 
 export const ToggleButton = styled.button`
   width: 36px;
   height: 36px;
   border-radius: 50%;
   border: 1px solid #1a1a1a;
-  background: ${({ $isOpen }) => ($isOpen ? '#f5f5f5' : 'none')};
+  background: ${({ $isOpen }) => ($isOpen ? "#3674f8" : "#0929b4")};
+  color: #ffffff;
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity, transform 0.2s ease;
+  transition:
+    opacity,
+    transform 0.2s ease;
   padding: 0;
+  position: absolute;
+  right: 0px;
 `;
 
 export const FormWrapper = styled.div`
@@ -205,10 +218,24 @@ export const BalanceCard = styled.div`
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease-in-out;
 
-
-  color: ${props => props.$balance > 0 ? '#16a34a' : props.$balance < 0 ? '#dc2626' : '#6b7280'};
-  border-color: ${props => props.$balance > 0 ? '#22c55e' : props.$balance < 0 ? '#ef4444' : '#d1d5db'};
-  background-color: ${props => props.$balance > 0 ? '#f0fdf4' : props.$balance < 0 ? '#fef2f2' : '#f9fafb'};
+  color: ${(props) =>
+    props.$balance > 0
+      ? "#16a34a"
+      : props.$balance < 0
+        ? "#c22323"
+        : "#6b7280"};
+  border-color: ${(props) =>
+    props.$balance > 0
+      ? "#22c55e"
+      : props.$balance < 0
+        ? "#a16868"
+        : "#d1d5db"};
+  background-color: ${(props) =>
+    props.$balance > 0
+      ? "#0d3318"
+      : props.$balance < 0
+        ? "#381010"
+        : "#222222"};
 `;
 
 export const BalanceLabel = styled.p`
@@ -216,7 +243,7 @@ export const BalanceLabel = styled.p`
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #6b7280;
+  color: #cadbff;
   margin-bottom: 0.25rem;
 `;
 
@@ -248,11 +275,70 @@ export const ErrorMessage = styled.p`
   color: #dc2626;
 `;
 
-
 export const EditButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
   font-size: 16px;
   padding: 4px;
+`;
+const floatAndSpin = keyframes`
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.25; 
+  }
+  90% {
+    opacity: 0.25;
+  }
+  100% {
+    transform: translateY(-120vh) rotate(360deg); 
+    opacity: 0;
+  }
+`;
+
+const gradientShift = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
+export const BackgroundCanvas = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: linear-gradient(-45deg, #0a1128, #1c0a35, #0f1c16, #052e16);
+  background-size: 400% 400%;
+  animation: ${gradientShift} 20s ease infinite;
+
+  overflow: hidden;
+  z-index: -1;
+`;
+
+export const FloatingSquare = styled.div`
+  position: absolute;
+  top: 100%;
+
+  background-color: ${(props) => props.color || "#3b82f6"};
+  border-radius: 12px;
+
+  box-shadow:
+    0 0 10px ${(props) => props.color || "rgba(59, 130, 246, 0.5)"},
+    0 0 30px ${(props) => props.color || "rgba(59, 130, 246, 0.3)"};
+
+  filter: blur(1px);
+
+  animation: ${floatAndSpin} ${(props) => props.duration || "15s"} linear
+    infinite;
+  animation-delay: ${(props) => props.delay || "0s"};
+  will-change: transform, opacity;
+
+  width: ${(props) => props.size || "80px"};
+  height: ${(props) => props.size || "80px"};
+  left: ${(props) => props.left || "10%"};
 `;

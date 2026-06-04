@@ -1,20 +1,21 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Card = styled.div`
   border: 1.5px solid #e0e0e0;
   border-radius: 10px;
   padding: 16px 18px 20px;
-  background-color: #ffffff;
-  font-family: 'DM Sans', sans-serif;
+  background-color: #1c0069;
+  font-family: "DM Sans", sans-serif;
   box-sizing: border-box;
   width: 100%;
+  color: #ffffff;
 `;
 
 export const Heading = styled.p`
   margin: 0 0 14px 0;
   font-size: 15px;
   font-weight: 600;
-  color: #111;
+  color: #d6d6d6;
   letter-spacing: -0.01em;
 `;
 
@@ -26,7 +27,7 @@ export const LabelText = styled.label`
   display: block;
   font-size: 13px;
   font-weight: 500;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 6px;
 `;
 
@@ -39,14 +40,15 @@ export const InputElement = styled.input`
   background-color: #fff;
   box-sizing: border-box;
   outline: none;
-  border: ${props => props.$hasError ? '1.5px solid #e74c3c' : '1.5px solid #e0e0e0'};
+  border: ${(props) =>
+    props.$hasError ? "1.5px solid #e74c3c" : "1.5px solid #e0e0e0"};
 
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-  &[type=number] {
+  &[type="number"] {
     -moz-appearance: textfield;
   }
 `;
@@ -67,7 +69,8 @@ export const SelectElement = styled.select`
   outline: none;
   appearance: none;
   cursor: pointer;
-  border: ${props => props.$hasError ? '1.5px solid #e74c3c' : '1.5px solid #e0e0e0'};
+  border: ${(props) =>
+    props.$hasError ? "1.5px solid #e74c3c" : "1.5px solid #e0e0e0"};
 `;
 
 export const ChevronIcon = styled.span`
@@ -85,7 +88,7 @@ export const RadioLabel = styled.label`
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #333;
+  color: #e6e6e6;
   cursor: pointer;
   user-select: none;
 `;
@@ -94,8 +97,8 @@ export const RadioCircle = styled.span`
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 1.5px solid ${props => props.$checked ? '#2ecc71' : '#ccc'};
-  background-color: ${props => props.$checked ? '#2ecc71' : 'transparent'};
+  border: 1.5px solid ${(props) => (props.$checked ? "#2ecc71" : "#ccc")};
+  background-color: ${(props) => (props.$checked ? "#2ecc71" : "transparent")};
   display: flex;
   align-items: center;
   justify-content: center;
