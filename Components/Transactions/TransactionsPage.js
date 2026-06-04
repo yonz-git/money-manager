@@ -27,6 +27,7 @@ export default function TransactionsPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [activeFilter, setActiveFilter] = useState(null);
+  const [activeTypeFilter, setActiveTypeFilter] = useState("All");
 
   const {
     data: transactionsData,
@@ -59,6 +60,15 @@ export default function TransactionsPage() {
         (transaction) => transaction.category === activeFilter
       );
     }
+
+    if (activeTypeFilter && activeTypeFilter !== "All") {
+      result = result.filter((transaction) => {
+        if (activeTypeFilter === "Income") return transaction.amount > 0;
+        if (activeTypeFilter === "Expense") return transaction.amount < 0;
+        return true;
+      });
+    }
+
     const transactionsClone = [...result];
 
     if (sortBy === "Newest") {
@@ -87,6 +97,10 @@ export default function TransactionsPage() {
 
   function handleApplyFilter(category) {
     setActiveFilter(category);
+  }
+
+  function handleApplyTypeFilter(type) {
+    setActiveTypeFilter(type);
   }
 
   async function handleAddTransaction(formData) {
@@ -162,7 +176,7 @@ export default function TransactionsPage() {
             onCancel={handleCancelEdit}
           />
         )}
-        <AccountBalance transactions={transactionsList} />
+        <AccountBalance transactions={sortedTransactions} />
         <TransactionsControls
           sortBy={sortBy}
           setSortBy={setSortBy}
@@ -170,12 +184,16 @@ export default function TransactionsPage() {
           activeFilter={activeFilter}
           onApplyFilter={handleApplyFilter}
           onClearFilter={() => setActiveFilter(null)}
+          activeTypeFilter={activeTypeFilter}
+          onTypeFilterChange={handleApplyTypeFilter}
         />
 
         {isLoading ? (
           <TransactionsSkeleton />
         ) : shouldShowEmptyState ? (
-          <TransactionsEmptyState isFiltered={activeFilter !== null} />
+          <TransactionsEmptyState
+            isFiltered={activeFilter !== null || activeTypeFilter !== "All"}
+          />
         ) : (
           <TransactionsList
             transactions={sortedTransactions}
