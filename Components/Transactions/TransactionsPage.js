@@ -63,9 +63,9 @@ export default function TransactionsPage() {
 
     if (activeTypeFilter && activeTypeFilter !== "All") {
       result = result.filter((transaction) => {
-        if (activeTypeFilter === "Income") return transaction.amount > 0;
-        if (activeTypeFilter === "Expense") return transaction.amount < 0;
-        return true;
+        activeTypeFilter === "Income"
+          ? transaction.amount > 0
+          : transaction.amount < 0;
       });
     }
 
