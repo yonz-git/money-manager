@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import Link from "next/link";
 
 export const PageWrapper = styled.div`
   max-width: 420px;
@@ -393,20 +394,94 @@ export const ErrorMessage = styled.p`
   color: #dc2626;
 `;
 
+// Detail Page
+
+export const DetailTitle = styled.h2`
+  font-size: 20px;
+  font-weight: 600;
+  margin: 16px 0 8px;
+`;
+
+export const DetailAmount = styled.p`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: ${({ $isIncome }) => ($isIncome ? "#10b981" : "#ef4444")};
+  margin: 8px 0;
+`;
+
+export const DetailMeta = styled.p`
+  font-size: 14px;
+  color: #444;
+  margin: 6px 0;
+`;
+
+export const BackLink = styled.span`
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 8px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export const DetailActions = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+`;
+
+export const EditLink = styled.span`
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #1a1a1a;
+  background: #fff;
+  display: block;
+  text-decoration: none;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+`;
+
+export const ActionButton = styled.button`
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #ef4444;
+  color: #fff;
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
+export const CardLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+`;
 
 const floatAndSpin = keyframes`
   0% {
     transform: translateY(0) rotate(0deg);
     opacity: 0;
   }
-  10% {
-    opacity: 0.25; 
-  }
-  90% {
-    opacity: 0.25;
-  }
+  10% { opacity: 0.25; }
+  90% { opacity: 0.25; }
   100% {
-    transform: translateY(-120vh) rotate(360deg); 
+    transform: translateY(-120vh) rotate(360deg);
     opacity: 0;
   }
 `;
@@ -423,11 +498,9 @@ export const BackgroundCanvas = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-
   background: linear-gradient(-45deg, #0a1128, #1c0a35, #0f1c16, #052e16);
   background-size: 400% 400%;
   animation: ${gradientShift} 20s ease infinite;
-
   overflow: hidden;
   z-index: -1;
 `;
@@ -435,21 +508,16 @@ export const BackgroundCanvas = styled.div`
 export const FloatingSquare = styled.div`
   position: absolute;
   top: 100%;
-
   background-color: ${(props) => props.color || "#3b82f6"};
   border-radius: 12px;
-
   box-shadow:
     0 0 10px ${(props) => props.color || "rgba(59, 130, 246, 0.5)"},
     0 0 30px ${(props) => props.color || "rgba(59, 130, 246, 0.3)"};
-
   filter: blur(1px);
-
   animation: ${floatAndSpin} ${(props) => props.duration || "15s"} linear
     infinite;
   animation-delay: ${(props) => props.delay || "0s"};
   will-change: transform, opacity;
-
   width: ${(props) => props.size || "80px"};
   height: ${(props) => props.size || "80px"};
   left: ${(props) => props.left || "10%"};
