@@ -472,3 +472,53 @@ export const CardLink = styled(Link)`
   text-decoration: none;
   color: inherit;
 `;
+
+const floatAndSpin = keyframes`
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 0.25; }
+  90% { opacity: 0.25; }
+  100% {
+    transform: translateY(-120vh) rotate(360deg);
+    opacity: 0;
+  }
+`;
+
+const gradientShift = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
+export const BackgroundCanvas = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(-45deg, #0a1128, #1c0a35, #0f1c16, #052e16);
+  background-size: 400% 400%;
+  animation: ${gradientShift} 20s ease infinite;
+  overflow: hidden;
+  z-index: -1;
+`;
+
+export const FloatingSquare = styled.div`
+  position: absolute;
+  top: 100%;
+  background-color: ${(props) => props.color || "#3b82f6"};
+  border-radius: 12px;
+  box-shadow:
+    0 0 10px ${(props) => props.color || "rgba(59, 130, 246, 0.5)"},
+    0 0 30px ${(props) => props.color || "rgba(59, 130, 246, 0.3)"};
+  filter: blur(1px);
+  animation: ${floatAndSpin} ${(props) => props.duration || "15s"} linear
+    infinite;
+  animation-delay: ${(props) => props.delay || "0s"};
+  will-change: transform, opacity;
+  width: ${(props) => props.size || "80px"};
+  height: ${(props) => props.size || "80px"};
+  left: ${(props) => props.left || "10%"};
+`;
