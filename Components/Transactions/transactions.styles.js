@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import Link from "next/link";
 
 export const PageWrapper = styled.div`
   max-width: 420px;
@@ -380,4 +381,83 @@ export const ErrorTitle = styled.p`
 export const ErrorMessage = styled.p`
   font-size: 14px;
   color: #dc2626;
+`;
+
+// Detail Page
+
+export const DetailTitle = styled.h2`
+  font-size: 20px;
+  font-weight: 600;
+  margin: 16px 0 8px;
+`;
+
+export const DetailAmount = styled.p`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: ${({ $isIncome }) => ($isIncome ? "#10b981" : "#ef4444")};
+  margin: 8px 0;
+`;
+
+export const DetailMeta = styled.p`
+  font-size: 14px;
+  color: #444;
+  margin: 6px 0;
+`;
+
+export const BackLink = styled.span`
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 8px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export const DetailActions = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+`;
+
+export const EditLink = styled.span`
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #1a1a1a;
+  background: #fff;
+  display: block;
+  text-decoration: none;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+`;
+
+export const ActionButton = styled.button`
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #ef4444;
+  color: #fff;
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
+export const CardLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
 `;
