@@ -6,8 +6,15 @@ import TransactionsList from "./TransactionsList";
 import TransactionsSkeleton from "./TransactionsSkeleton";
 import TransactionsEmptyState from "./TransactionsEmptyState";
 import TransactionForm from "../TransactionsForm/TransactionsForm";
-import AccountBalance from "./AccountBalance"; 
-import { PageWrapper, Content, FormWrapper,ErrorContainer,ErrorTitle,ErrorMessage } from "./transactions.styles";
+import AccountBalance from "./AccountBalance";
+import {
+  PageWrapper,
+  Content,
+  FormWrapper,
+  ErrorContainer,
+  ErrorTitle,
+  ErrorMessage,
+} from "./transactions.styles";
 
 async function fetcher(url) {
   const response = await fetch(url);
@@ -19,6 +26,8 @@ export default function TransactionsPage() {
   const [sortBy, setSortBy] = useState("Newest");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
+  const [activeFilter, setActiveFilter] = useState(null);
+  const [activeTypeFilter, setActiveTypeFilter] = useState("All");
 
   const {
     data: transactionsData,
@@ -42,24 +51,40 @@ export default function TransactionsPage() {
     setEditingTransaction(null);
   }
 
-  function getSortedTransactions() {
+  function getSortedAndFilterTransactions() {
     if (transactionsList.length === 0) return [];
-    const transactionsClone = [...transactionsList];
+
+    let result = transactionsList;
+    if (activeFilter) {
+      result = transactionsList.filter(
+        (transaction) => transaction.category === activeFilter
+      );
+    }
+
+    if (activeTypeFilter && activeTypeFilter !== "All") {
+      result = result.filter((transaction) => {
+        if (activeTypeFilter === "Income") return transaction.amount > 0;
+        if (activeTypeFilter === "Expense") return transaction.amount < 0;
+        return true;
+      });
+    }
+
+    const transactionsClone = [...result];
 
     if (sortBy === "Newest") {
-      transactionsClone.sort(function(a, b) {
+      transactionsClone.sort(function (a, b) {
         return b.date.localeCompare(a.date);
       });
     } else if (sortBy === "Oldest") {
-      transactionsClone.sort(function(a, b) {
+      transactionsClone.sort(function (a, b) {
         return a.date.localeCompare(b.date);
       });
     } else if (sortBy === "AmountHigh") {
-      transactionsClone.sort(function(a, b) {
+      transactionsClone.sort(function (a, b) {
         return b.amount - a.amount;
       });
     } else if (sortBy === "AmountLow") {
-      transactionsClone.sort(function(a, b) {
+      transactionsClone.sort(function (a, b) {
         return a.amount - b.amount;
       });
     }
@@ -67,8 +92,16 @@ export default function TransactionsPage() {
     return transactionsClone;
   }
 
-  const sortedTransactions = getSortedTransactions();
+  const sortedTransactions = getSortedAndFilterTransactions();
   const shouldShowEmptyState = !isLoading && sortedTransactions.length === 0;
+
+  function handleApplyFilter(category) {
+    setActiveFilter(category);
+  }
+
+  function handleApplyTypeFilter(type) {
+    setActiveTypeFilter(type);
+  }
 
   async function handleAddTransaction(formData) {
     const response = await fetch("/api/transactions", {
@@ -116,13 +149,12 @@ export default function TransactionsPage() {
         onToggleForm={handleToggleForm}
       />
       <Content>
-        
-       
         {error && (
           <ErrorContainer>
             <ErrorTitle>Database Sync Error</ErrorTitle>
             <ErrorMessage>
-              We are unable to load your accounts right now. Please try again later.
+              We are unable to load your accounts right now. Please try again
+              later.
             </ErrorMessage>
           </ErrorContainer>
         )}
@@ -144,16 +176,28 @@ export default function TransactionsPage() {
             onCancel={handleCancelEdit}
           />
         )}
-         <AccountBalance transactions={transactionsList} />
-        <TransactionsControls sortBy={sortBy} setSortBy={setSortBy} />
+        <AccountBalance transactions={sortedTransactions} />
+        <TransactionsControls
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          categoriesList={categoriesList}
+          activeFilter={activeFilter}
+          onApplyFilter={handleApplyFilter}
+          onClearFilter={() => setActiveFilter(null)}
+          activeTypeFilter={activeTypeFilter}
+          onTypeFilterChange={handleApplyTypeFilter}
+        />
 
         {isLoading ? (
           <TransactionsSkeleton />
         ) : shouldShowEmptyState ? (
-          <TransactionsEmptyState />
+          <TransactionsEmptyState
+            isFiltered={activeFilter !== null || activeTypeFilter !== "All"}
+          />
         ) : (
           <TransactionsList
             transactions={sortedTransactions}
+            onDeleteSuccess={mutate}
             onEditTransaction={handleEditTransaction}
           />
         )}

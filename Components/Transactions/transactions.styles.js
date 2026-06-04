@@ -207,6 +207,124 @@ export const FormWrapper = styled.div`
   width: 100%;
 `;
 
+export const Buttons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-left: 1rem;
+`;
+
+export const EditButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    color: #2f25c8;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+export const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666666;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    color: #8a0d0d;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+export const CardRight = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+`;
+
+export const DeleteModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+`;
+
+export const DeleteModalContainer = styled.div`
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+`;
+
+export const DeleteConfirmationMessage = styled.p`
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  color: #333333;
+  line-height: 1.5;
+`;
+
+export const DeleteModalButtonContainer = styled.div`
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+`;
+
+export const DeleteModalButton = styled.button`
+  padding: 10px 24px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    opacity 0.15s ease;
+
+  background-color: ${(props) =>
+    props.$variant === "destructive" ? "#ef4444" : "#e5e7eb"};
+  color: ${(props) =>
+    props.$variant === "destructive" ? "#ffffff" : "#1f2937"};
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
 export const BalanceCard = styled.div`
   width: 100%;
   max-width: 28rem;
