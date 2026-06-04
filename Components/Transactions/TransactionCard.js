@@ -9,29 +9,10 @@ import {
   Amount,
   CardLink,
 } from "./transactions.styles";
-
-function getIcon(category) {
-  const map = {
-    Groceries: "🛒",
-    Rent: "🏠",
-    Salary: "💼",
-    Miscellaneous: "📦",
-    Entertainment: "🎭",
-    Health: "🩺",
-    Investment: "📈",
-    Utilities: "⚡",
-    Education: "📚",
-    Restaurants: "🍽️",
-    Savings: "💰",
-    Transportation: "🚌",
-    Insurance: "🛡️",
-  };
-
-  return map[category] || "•";
-}
+import { getIcon } from "../../utils/getIcon";
 
 export default function TransactionCard({ transaction }) {
-  const isIncome = transaction.amount >= 0;
+  const isIncome = transaction.amount > 0;
 
   return (
     <CardLink href={`/transactions/${transaction._id}`}>

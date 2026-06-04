@@ -15,34 +15,14 @@ import {
   DetailMeta,
   BackLink,
   DetailActions,
-  EditLink,
   ActionButton,
 } from "../../Components/Transactions/transactions.styles";
+import { getIcon } from "../../utils/getIcon";
 
 async function fetcher(url) {
   const response = await fetch(url);
   if (!response.ok) throw new Error("Network error");
   return response.json();
-}
-
-function getIcon(category) {
-  const map = {
-    Groceries: "🛒",
-    Rent: "🏠",
-    Salary: "💼",
-    Miscellaneous: "📦",
-    Entertainment: "🎭",
-    Health: "🩺",
-    Investment: "📈",
-    Utilities: "⚡",
-    Education: "📚",
-    Restaurants: "🍽️",
-    Savings: "💰",
-    Transportation: "🚌",
-    Insurance: "🛡️",
-  };
-
-  return map[category] || "•";
 }
 
 function formatTimestamp(dateString) {
@@ -151,8 +131,6 @@ export default function TransactionDetailPage() {
         <DetailMeta>Added: {addedTimestamp}</DetailMeta>
 
         <DetailActions>
-          <EditLink>Edit</EditLink>
-
           <ActionButton onClick={() => setIsDeleteModalOpen(true)}>
             Delete
           </ActionButton>

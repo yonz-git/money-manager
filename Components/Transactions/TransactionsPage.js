@@ -195,11 +195,7 @@ export default function TransactionsPage() {
             isFiltered={activeFilter !== null || activeTypeFilter !== "All"}
           />
         ) : (
-          <TransactionsList
-            transactions={sortedTransactions}
-            onDeleteSuccess={mutate}
-            onEditTransaction={handleEditTransaction}
-          />
+          <TransactionsList transactions={sortedTransactions} />
         )}
       </Content>
     </PageWrapper>
