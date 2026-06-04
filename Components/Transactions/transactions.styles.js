@@ -393,13 +393,7 @@ export const ErrorMessage = styled.p`
   color: #dc2626;
 `;
 
-export const EditButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 4px;
-`;
+
 const floatAndSpin = keyframes`
   0% {
     transform: translateY(0) rotate(0deg);
