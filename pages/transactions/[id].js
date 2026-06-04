@@ -19,16 +19,6 @@ import {
   ActionButton,
 } from "../../Components/Transactions/transactions.styles";
 
-console.log({
-  DetailTitle,
-  DetailAmount,
-  DetailMeta,
-  BackLink,
-  DetailActions,
-  EditLink,
-  ActionButton,
-});
-
 async function fetcher(url) {
   const response = await fetch(url);
   if (!response.ok) throw new Error("Network error");
@@ -53,6 +43,27 @@ function getIcon(category) {
   };
 
   return map[category] || "•";
+}
+
+function formatTimestamp(dateString) {
+  const date = new Date(dateString);
+  const today = new Date();
+  const isToday = date.toDateString() === today.toDateString();
+
+  if (isToday) {
+    return `Today at ${date.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}`;
+  }
+
+  return date.toLocaleString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 export default function TransactionDetailPage() {
@@ -112,13 +123,7 @@ export default function TransactionDetailPage() {
   });
 
   const addedTimestamp = transaction.createdAt
-    ? new Date(transaction.createdAt).toLocaleString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
+    ? formatTimestamp(transaction.createdAt)
     : "—";
 
   return (
