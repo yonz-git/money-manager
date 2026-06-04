@@ -3,6 +3,8 @@ import {
   BackgroundCanvas,
   FloatingSquare,
 } from "../Components/Transactions/transactions.styles";
+import BottomNav from "@/Components/BottomNav/BottomNav";
+
 export default function HomePage() {
   return (
     <>
@@ -37,6 +39,7 @@ export default function HomePage() {
         />
       </BackgroundCanvas>
       <TransactionsPage />
+      <BottomNav />
     </>
   );
 }
