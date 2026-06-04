@@ -6,14 +6,16 @@ export const PageWrapper = styled.div`
   margin: 0 auto;
   min-height: 100vh;
   background: #fff;
+  background: transparent !important;
   font-family: Arial, sans-serif;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
 `;
 
 export const Header = styled.header`
   display: flex;
+  position: relative;
   align-items: center;
-  justify-content: center; /* Centered since the menu icon is removed */
+  justify-content: center;
   padding: 14px 16px;
   border-bottom: 1px solid #e5e7eb;
 `;
@@ -22,10 +24,12 @@ export const Title = styled.h1`
   margin: 0;
   font-size: 18px;
   font-weight: 600;
+  color: aliceblue;
 `;
 
 export const Content = styled.div`
   padding: 16px;
+  background: transparent !important;
 `;
 
 export const ControlsRow = styled.div`
@@ -39,7 +43,7 @@ export const Dropdown = styled.select`
   height: 40px;
   border: 1px solid #bdbdbd;
   border-radius: 4px;
-  background: #fff;
+  background: #a499c4;
   padding: 0 10px;
   font-size: 14px;
   outline: none;
@@ -59,6 +63,7 @@ export const Card = styled.div`
   justify-content: space-between;
   align-items: center;
   background: #fff;
+  color: #fff;
 `;
 
 export const CardLeft = styled.div`
@@ -165,13 +170,16 @@ export const SkeletonAmount = styled(SkeletonBlock)`
 `;
 
 export const ListWrapper = styled.div`
-  max-height: 70vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 6px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
+  width: 100%;
+
+  & > * {
+    background: #1c0069;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 export const ToggleButton = styled.button`
@@ -179,7 +187,8 @@ export const ToggleButton = styled.button`
   height: 36px;
   border-radius: 50%;
   border: 1px solid #1a1a1a;
-  background: ${({ $isOpen }) => ($isOpen ? "#f5f5f5" : "none")};
+  background: ${({ $isOpen }) => ($isOpen ? "#3674f8" : "#0929b4")};
+  color: #ffffff;
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
@@ -187,9 +196,11 @@ export const ToggleButton = styled.button`
   align-items: center;
   justify-content: center;
   transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
+    opacity,
+    transform 0.2s ease;
   padding: 0;
+  position: absolute;
+  right: 0px;
 `;
 
 export const FormWrapper = styled.div`
@@ -330,20 +341,20 @@ export const BalanceCard = styled.div`
     props.$balance > 0
       ? "#16a34a"
       : props.$balance < 0
-        ? "#dc2626"
+        ? "#c22323"
         : "#6b7280"};
   border-color: ${(props) =>
     props.$balance > 0
       ? "#22c55e"
       : props.$balance < 0
-        ? "#ef4444"
+        ? "#a16868"
         : "#d1d5db"};
   background-color: ${(props) =>
     props.$balance > 0
-      ? "#f0fdf4"
+      ? "#0d3318"
       : props.$balance < 0
-        ? "#fef2f2"
-        : "#f9fafb"};
+        ? "#381010"
+        : "#222222"};
 `;
 
 export const BalanceLabel = styled.p`
@@ -351,7 +362,7 @@ export const BalanceLabel = styled.p`
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #6b7280;
+  color: #cadbff;
   margin-bottom: 0.25rem;
 `;
 
