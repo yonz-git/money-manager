@@ -76,8 +76,11 @@ export const SummaryValue = styled.p`
   font-size: 18px;
   font-weight: 700;
   margin: 0;
-  color: ${({ $positive, $negative }) =>
-    $positive ? "#10b981" : $negative ? "#ef4444" : "#fff"};
+  color: ${({ $positive, $negative }) => {
+    if ($positive) return "#10b981";
+    if ($negative) return "#ef4444";
+    return "#fff";
+  }};
 `;
 
 export const SectionTitle = styled.h2`

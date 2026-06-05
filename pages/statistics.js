@@ -34,12 +34,16 @@ import {
   EmptyState,
   BackToHome,
 } from "../Components/Statistics/statistics.styles";
-import { getCategoryColor } from "@/utils/getCategoryColor";
+import { getCategoryColor } from "../utils/getCategoryColor";
 
 async function fetcher(url) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error("Network error");
-  return response.json();
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Network error");
+    return response.json();
+  } catch (error) {
+    throw new Error("Failed to load data. Please try again.");
+  }
 }
 
 function groupByMonth(transactions) {
