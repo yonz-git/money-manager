@@ -87,14 +87,14 @@ export const List = styled.div`
 `;
 
 export const Card = styled.div`
-  border: 1px solid #d7d7d7;
+  border: none;
   border-radius: 4px;
   padding: 10px 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fff;
-  color: #fff;
+  background: transparent;
+  color: inherit;
 `;
 
 export const CardLeft = styled.div`
@@ -115,10 +115,12 @@ export const CardTitle = styled.div`
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 2px;
+  color: #ffffff;
 `;
 
 export const CardMeta = styled.div`
   font-size: 11px;
+  color: #a0a0c0;
   color: #373cba;
 `;
 
