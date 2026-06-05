@@ -431,9 +431,10 @@ export const DetailActions = styled.div`
   display: flex;
   gap: 10px;
   margin-top: 20px;
+  align-items: stretch;
 `;
 
-export const EditLink = styled.span`
+export const EditLink = styled(Link)`
   flex: 1;
   padding: 10px;
   text-align: center;
@@ -444,8 +445,11 @@ export const EditLink = styled.span`
   cursor: pointer;
   color: #1a1a1a;
   background: #fff;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
+  box-sizing: border-box;
 
   &:hover {
     background: #f5f5f5;
