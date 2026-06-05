@@ -16,14 +16,9 @@ import {
   BackLink,
   DetailActions,
   ActionButton,
+  EditLink,
 } from "../../Components/Transactions/transactions.styles";
-import { getIcon } from "../../utils/getIcon";
-
-async function fetcher(url) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error("Network error");
-  return response.json();
-}
+import { categoryConfig } from "../../utils/categoryConfig";
 
 function formatTimestamp(dateString) {
   const date = new Date(dateString);
@@ -55,7 +50,7 @@ export default function TransactionDetailPage() {
     data: transaction,
     isLoading,
     error,
-  } = useSWR(id ? `/api/transactions/${id}` : null, fetcher);
+  } = useSWR(id ? `/api/transactions/${id}` : null);
 
   async function handleDelete() {
     const response = await fetch(`/api/transactions/${id}`, {
@@ -130,7 +125,16 @@ export default function TransactionDetailPage() {
 
         <DetailMeta>Added: {addedTimestamp}</DetailMeta>
 
+        {transaction.updatedAt &&
+          transaction.updatedAt !== transaction.createdAt && (
+            <DetailMeta>
+              Edited: {formatTimestamp(transaction.updatedAt)}
+            </DetailMeta>
+          )}
+
         <DetailActions>
+          <EditLink href={`/transactions/${id}/edit`}>Edit</EditLink>
+
           <ActionButton onClick={() => setIsDeleteModalOpen(true)}>
             Delete
           </ActionButton>
