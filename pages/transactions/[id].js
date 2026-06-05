@@ -18,7 +18,7 @@ import {
   ActionButton,
   EditLink,
 } from "../../Components/Transactions/transactions.styles";
-import { getIcon } from "../../utils/getIcon";
+import { categoryConfig } from "../../utils/categoryConfig";
 
 function formatTimestamp(dateString) {
   const date = new Date(dateString);

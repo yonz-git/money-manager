@@ -9,7 +9,7 @@ import {
   Amount,
   CardLink,
 } from "./transactions.styles";
-import { getIcon } from "../../utils/getIcon";
+import { getIcon } from "../../utils/categoryConfig";
 
 export default function TransactionCard({ transaction }) {
   const isIncome = transaction.amount > 0;
