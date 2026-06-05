@@ -3,7 +3,17 @@ import { SWRConfig } from "swr";
 
 async function fetcher(url) {
   const response = await fetch(url);
-  if (!response.ok) throw new Error("Network error");
+  if (!response.ok) {
+    const error = new Error("An error occurred while fetching the data.");
+    error.status = response.status;
+
+    try {
+      error.info = await response.json();
+    } catch {
+      error.info = null;
+    }
+    throw error;
+  }
   return response.json();
 }
 
