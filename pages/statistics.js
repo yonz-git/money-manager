@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import useSWR from "swr";
-import { getIcon } from "../utils/getIcon";
+import { getIcon, getCategoryColor } from "../utils/categoryConfig";
 import {
   PageWrapper,
   Content,
