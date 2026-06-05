@@ -36,16 +36,6 @@ import {
 } from "../Components/Statistics/statistics.styles";
 import { getCategoryColor } from "../utils/getCategoryColor";
 
-async function fetcher(url) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Network error");
-    return response.json();
-  } catch (error) {
-    throw new Error("Failed to load data. Please try again.");
-  }
-}
-
 function groupByMonth(transactions) {
   const groups = {};
   transactions.forEach((transaction) => {
@@ -102,7 +92,7 @@ export default function StatisticsPage() {
     data: transactionsData,
     isLoading,
     error,
-  } = useSWR("/api/transactions", fetcher);
+  } = useSWR("/api/transactions");
 
   const transactions = Array.isArray(transactionsData) ? transactionsData : [];
   const grouped = groupByMonth(transactions);
