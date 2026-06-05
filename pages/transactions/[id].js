@@ -116,8 +116,8 @@ export default function TransactionDetailPage() {
         <DetailTitle>{transaction.title}</DetailTitle>
 
         <DetailAmount $isIncome={isIncome}>
-          {isIncome ? "+" : "-"}
-          {formattedAmount} €
+          {isIncome ? "+" : "-"} €
+          {formattedAmount}
         </DetailAmount>
 
         <DetailMeta>Type: {isIncome ? "Income" : "Expense"}</DetailMeta>
