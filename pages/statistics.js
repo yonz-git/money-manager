@@ -33,7 +33,7 @@ import {
   MonthRowBalance,
   EmptyState,
   BackToHome,
-} from "./statistics.styles";
+} from "../Components/Statistics/statistics.styles";
 import { getCategoryColor } from "@/utils/getCategoryColor";
 
 async function fetcher(url) {
