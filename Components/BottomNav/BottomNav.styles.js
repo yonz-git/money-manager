@@ -7,7 +7,6 @@ export const StyledNav = styled.nav`
   width: 100%;
   height: 60px;
   background-color: #ff9ff2;
-  border-top: 1px solid #ff9ff2;
 `;
 
 export const NavList = styled.ul`

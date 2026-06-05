@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { StyledNav, NavList, NavItem } from "./BottomNav.styles";
 
-export default function NavBar() {
+export default function BottomNav() {
   const router = useRouter();
 
   return (
@@ -14,7 +14,7 @@ export default function NavBar() {
         <NavItem
           className={router?.pathname.includes("/statistics") ? "active" : ""}
         >
-          <Link href="/statistics">Statistics</Link>
+          <Link href="">Statistics</Link>
         </NavItem>
       </NavList>
     </StyledNav>
