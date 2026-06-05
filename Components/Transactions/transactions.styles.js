@@ -18,13 +18,44 @@ export const Header = styled.header`
   justify-content: center;
   padding: 14px 16px;
   border-bottom: 1px solid #e5e7eb;
+  min-height: 60px;
 `;
 
 export const Title = styled.h1`
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 500;
   color: aliceblue;
+  text-align: center;
+`;
+
+export const StyledLogo = styled.img`
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  position: absolute;
+  left: 16px;
+`;
+
+export const ToggleButton = styled.button`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #1a1a1a;
+  background: ${({ $isOpen }) => ($isOpen ? "#fa60e3" : "#ff2a8e")};
+  color: #ffffff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity,
+    transform 0.2s ease;
+  padding: 0;
+  position: absolute;
+  right: 0px;
 `;
 
 export const Content = styled.div`
@@ -88,7 +119,7 @@ export const CardTitle = styled.div`
 
 export const CardMeta = styled.div`
   font-size: 11px;
-  color: #666;
+  color: #373cba;
 `;
 
 export const Amount = styled.div`
@@ -180,27 +211,6 @@ export const ListWrapper = styled.div`
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   }
-`;
-
-export const ToggleButton = styled.button`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid #1a1a1a;
-  background: ${({ $isOpen }) => ($isOpen ? "#3674f8" : "#0929b4")};
-  color: #ffffff;
-  font-size: 24px;
-  line-height: 1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition:
-    opacity,
-    transform 0.2s ease;
-  padding: 0;
-  position: absolute;
-  right: 0px;
 `;
 
 export const FormWrapper = styled.div`
