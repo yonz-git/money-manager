@@ -34,7 +34,6 @@ import {
   EmptyState,
   BackToHome,
 } from "../Components/Statistics/statistics.styles";
-import { getCategoryColor } from "../utils/getCategoryColor";
 
 function groupByMonth(transactions) {
   const groups = {};

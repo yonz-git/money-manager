@@ -18,7 +18,7 @@ import {
   ActionButton,
   EditLink,
 } from "../../Components/Transactions/transactions.styles";
-import { categoryConfig } from "../../utils/categoryConfig";
+import { getIcon } from "../../utils/categoryConfig";
 
 function formatTimestamp(dateString) {
   const date = new Date(dateString);
@@ -111,8 +111,8 @@ export default function TransactionDetailPage() {
         <DetailTitle>{transaction.title}</DetailTitle>
 
         <DetailAmount $isIncome={isIncome}>
-          {isIncome ? "+" : "-"} €
-          {formattedAmount}
+          {isIncome ? "+" : "-"}
+          {formattedAmount} €
         </DetailAmount>
 
         <DetailMeta>Type: {isIncome ? "Income" : "Expense"}</DetailMeta>
