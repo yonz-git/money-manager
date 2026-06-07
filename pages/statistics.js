@@ -34,6 +34,7 @@ import {
   EmptyState,
   BackToHome,
 } from "../Components/Statistics/statistics.styles";
+import { formatCurrency } from "../utils/formatCurrency";
 
 function groupByMonth(transactions) {
   const groups = {};
@@ -77,13 +78,6 @@ function formatMonthLabel(monthKey) {
   const [year, month] = monthKey.split("-");
   const date = new Date(year, month - 1);
   return date.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
-}
-
-function formatCurrency(amount) {
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: "EUR",
-  }).format(Math.abs(amount));
 }
 
 export default function StatisticsPage() {
@@ -204,7 +198,7 @@ export default function StatisticsPage() {
                 <SummaryCard>
                   <SummaryLabel>Expenses</SummaryLabel>
                   <SummaryValue $negative>
-                    {formatCurrency(summary.expenses)}
+                    {formatCurrency(Math.abs(summary.expenses))}
                   </SummaryValue>
                 </SummaryCard>
                 <SummaryCard $full>
@@ -213,8 +207,8 @@ export default function StatisticsPage() {
                     $positive={summary.balance >= 0}
                     $negative={summary.balance < 0}
                   >
-                    {summary.balance >= 0 ? "+" : "-"}
-                    {formatCurrency(summary.balance)}
+                    {summary.balance < 0 ? "-" : ""}
+                    {formatCurrency(Math.abs(summary.balance))}
                   </SummaryValue>
                 </SummaryCard>
               </SummaryGrid>
@@ -255,8 +249,8 @@ export default function StatisticsPage() {
                         {grouped[month].length} transactions
                       </MonthRowMeta>
                       <MonthRowBalance $positive={monthSummary.balance >= 0}>
-                        {monthSummary.balance >= 0 ? "+" : "-"}
-                        {formatCurrency(monthSummary.balance)}
+                        {monthSummary.balance < 0 ? "-" : ""}
+                        {formatCurrency(Math.abs(monthSummary.balance))}
                       </MonthRowBalance>
                     </MonthRow>
                   );

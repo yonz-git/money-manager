@@ -19,6 +19,7 @@ import {
   EditLink,
 } from "../../Components/Transactions/transactions.styles";
 import { getIcon } from "../../utils/categoryConfig";
+import { formatCurrency } from "../../utils/formatCurrency";
 
 function formatTimestamp(dateString) {
   const date = new Date(dateString);
@@ -85,11 +86,7 @@ export default function TransactionDetailPage() {
 
   const isIncome = transaction.amount > 0;
 
-  const formattedAmount = new Intl.NumberFormat("en-US", {
-    style: "decimal",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(Math.abs(transaction.amount));
+  const formattedAmount = formatCurrency(Math.abs(transaction.amount));
 
   const formattedDate = new Date(transaction.date).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -111,8 +108,8 @@ export default function TransactionDetailPage() {
         <DetailTitle>{transaction.title}</DetailTitle>
 
         <DetailAmount $isIncome={isIncome}>
-          {isIncome ? "+" : "-"}
-          {formattedAmount} €
+          {isIncome ? "" : "-"}
+          {formattedAmount}
         </DetailAmount>
 
         <DetailMeta>Type: {isIncome ? "Income" : "Expense"}</DetailMeta>

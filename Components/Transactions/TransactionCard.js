@@ -10,6 +10,7 @@ import {
   CardLink,
 } from "./transactions.styles";
 import { getIcon } from "../../utils/categoryConfig";
+import { formatCurrency } from "../../utils/formatCurrency";
 
 export default function TransactionCard({ transaction }) {
   const isIncome = transaction.amount > 0;
@@ -30,12 +31,8 @@ export default function TransactionCard({ transaction }) {
 
         <CardRight>
           <Amount $income={isIncome}>
-            {isIncome ? "" : "-"} €
-            {new Intl.NumberFormat("en-US", {
-              style: "decimal",
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }).format(Math.abs(transaction.amount))}
+            {isIncome ? "" : "-"}
+            {formatCurrency(Math.abs(transaction.amount))}
           </Amount>
         </CardRight>
       </Card>
