@@ -175,7 +175,7 @@ export const ListWrapper = styled.div`
   width: 100%;
 
   & > * {
-    background: #1c0069;
+    background: #350932be;
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   }
@@ -453,7 +453,7 @@ export const BackgroundCanvas = styled.div`
   width: 100vw;
   height: 100vh;
 
-  background: linear-gradient(-45deg, #0a1128, #1c0a35, #0f1c16, #052e16);
+  background: linear-gradient(-45deg, #3e1249, #4401a1, #ca00a9, #7b0299);
   background-size: 400% 400%;
   animation: ${gradientShift} 20s ease infinite;
 
