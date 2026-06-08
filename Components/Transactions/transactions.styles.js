@@ -229,7 +229,7 @@ export const EditButton = styled.button`
 
   &:hover {
     transform: scale(1.1);
-    color: #564ce2;
+    color: #958dfb;
   }
 
   &:active {
