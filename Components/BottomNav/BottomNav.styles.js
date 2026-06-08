@@ -45,7 +45,7 @@ export const NavItem = styled.li`
     background: linear-gradient(
       1deg,
       rgba(218, 36, 194, 1) 100%,
-      rgba(255, 133, 239, 1) 0%
+      rgba(255, 133, 239, 0.8) 0%
     );
   }
 
