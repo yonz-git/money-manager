@@ -16,12 +16,6 @@ import {
   ErrorMessage,
 } from "./transactions.styles";
 
-async function fetcher(url) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error("Network error");
-  return response.json();
-}
-
 export default function TransactionsPage() {
   const [sortBy, setSortBy] = useState("Newest");
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -34,9 +28,9 @@ export default function TransactionsPage() {
     error,
     isLoading,
     mutate,
-  } = useSWR("/api/transactions", fetcher);
+  } = useSWR("/api/transactions");
 
-  const { data: categoriesData } = useSWR("/api/category", fetcher);
+  const { data: categoriesData } = useSWR("/api/category");
 
   const transactionsList = transactionsData
     ? Array.isArray(transactionsData)
@@ -195,11 +189,7 @@ export default function TransactionsPage() {
             isFiltered={activeFilter !== null || activeTypeFilter !== "All"}
           />
         ) : (
-          <TransactionsList
-            transactions={sortedTransactions}
-            onDeleteSuccess={mutate}
-            onEditTransaction={handleEditTransaction}
-          />
+          <TransactionsList transactions={sortedTransactions} />
         )}
       </Content>
     </PageWrapper>

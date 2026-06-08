@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import Link from "next/link";
 
 export const PageWrapper = styled.div`
   max-width: 420px;
@@ -17,13 +18,44 @@ export const Header = styled.header`
   justify-content: center;
   padding: 14px 16px;
   border-bottom: 1px solid #e5e7eb;
+  min-height: 60px;
 `;
 
 export const Title = styled.h1`
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 500;
   color: aliceblue;
+  text-align: center;
+`;
+
+export const StyledLogo = styled.img`
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  position: absolute;
+  left: 16px;
+`;
+
+export const ToggleButton = styled.button`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #1a1a1a;
+  background: ${({ $isOpen }) => ($isOpen ? "#fa60e3" : "#ff2a8e")};
+  color: #ffffff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity,
+    transform 0.2s ease;
+  padding: 0;
+  position: absolute;
+  right: 0px;
 `;
 
 export const Content = styled.div`
@@ -55,14 +87,14 @@ export const List = styled.div`
 `;
 
 export const Card = styled.div`
-  border: 1px solid #d7d7d7;
+  border: none;
   border-radius: 4px;
   padding: 10px 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fff;
-  color: #fff;
+  background: transparent;
+  color: inherit;
 `;
 
 export const CardLeft = styled.div`
@@ -83,11 +115,13 @@ export const CardTitle = styled.div`
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 2px;
+  color: #ffffff;
 `;
 
 export const CardMeta = styled.div`
   font-size: 11px;
-  color: #666;
+  color: #a0a0c0;
+  color: #373cba;
 `;
 
 export const Amount = styled.div`
@@ -179,27 +213,6 @@ export const ListWrapper = styled.div`
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   }
-`;
-
-export const ToggleButton = styled.button`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid #1a1a1a;
-  background: ${({ $isOpen }) => ($isOpen ? "#3674f8" : "#0929b4")};
-  color: #ffffff;
-  font-size: 24px;
-  line-height: 1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition:
-    opacity,
-    transform 0.2s ease;
-  padding: 0;
-  position: absolute;
-  right: 0px;
 `;
 
 export const FormWrapper = styled.div`
@@ -393,19 +406,99 @@ export const ErrorMessage = styled.p`
   color: #dc2626;
 `;
 
+// Detail Page
+
+export const DetailTitle = styled.h2`
+  font-size: 20px;
+  font-weight: 600;
+  margin: 16px 0 8px;
+  color: #ffffff;
+`;
+
+export const DetailAmount = styled.p`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: ${({ $isIncome }) => ($isIncome ? "#10b981" : "#ef4444")};
+  margin: 8px 0;
+`;
+
+export const DetailMeta = styled.p`
+  font-size: 14px;
+  color: #a0a0c0;
+  margin: 6px 0;
+`;
+
+export const BackLink = styled.span`
+  font-size: 14px;
+  color: #a0a0c0;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 8px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export const DetailActions = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  align-items: stretch;
+`;
+
+export const EditLink = styled(Link)`
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #4a4a6a;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #ffffff;
+  background: #1c0069;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-sizing: border-box;
+
+  &:hover {
+    background: #2a0090;
+  }
+`;
+
+export const ActionButton = styled.button`
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #ef4444;
+  color: #fff;
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
+export const CardLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+`;
+
 const floatAndSpin = keyframes`
   0% {
     transform: translateY(0) rotate(0deg);
     opacity: 0;
   }
-  10% {
-    opacity: 0.25; 
-  }
-  90% {
-    opacity: 0.25;
-  }
+  10% { opacity: 0.25; }
+  90% { opacity: 0.25; }
   100% {
-    transform: translateY(-120vh) rotate(360deg); 
+    transform: translateY(-120vh) rotate(360deg);
     opacity: 0;
   }
 `;
@@ -422,11 +515,9 @@ export const BackgroundCanvas = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-
   background: linear-gradient(-45deg, #0a1128, #1c0a35, #0f1c16, #052e16);
   background-size: 400% 400%;
   animation: ${gradientShift} 20s ease infinite;
-
   overflow: hidden;
   z-index: -1;
 `;
@@ -434,21 +525,16 @@ export const BackgroundCanvas = styled.div`
 export const FloatingSquare = styled.div`
   position: absolute;
   top: 100%;
-
   background-color: ${(props) => props.color || "#3b82f6"};
   border-radius: 12px;
-
   box-shadow:
     0 0 10px ${(props) => props.color || "rgba(59, 130, 246, 0.5)"},
     0 0 30px ${(props) => props.color || "rgba(59, 130, 246, 0.3)"};
-
   filter: blur(1px);
-
   animation: ${floatAndSpin} ${(props) => props.duration || "15s"} linear
     infinite;
   animation-delay: ${(props) => props.delay || "0s"};
   will-change: transform, opacity;
-
   width: ${(props) => props.size || "80px"};
   height: ${(props) => props.size || "80px"};
   left: ${(props) => props.left || "10%"};

@@ -29,6 +29,9 @@ export const NavItem = styled.li`
   align-items: center;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 
   &.active {
     background: #da24c2;

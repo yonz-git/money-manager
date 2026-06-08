@@ -12,9 +12,9 @@ export default function BottomNav() {
           <Link href="/">Home</Link>
         </NavItem>
         <NavItem
-          className={router?.pathname.includes("/statistics") ? "active" : ""}
+          className={router.pathname.includes("/statistics") ? "active" : ""}
         >
-          <Link href="">Statistics</Link>
+          <Link href="/statistics">Statistics</Link>
         </NavItem>
       </NavList>
     </StyledNav>
