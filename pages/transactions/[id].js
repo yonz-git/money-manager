@@ -17,8 +17,11 @@ import {
   DetailActions,
   ActionButton,
   EditLink,
+  BackgroundCanvas,
+  FloatingSquare,
 } from "../../Components/Transactions/transactions.styles";
-import { categoryConfig } from "../../utils/categoryConfig";
+import { getIcon } from "../../utils/categoryConfig";
+import { formatCurrency } from "../../utils/formatCurrency";
 
 function formatTimestamp(dateString) {
   const date = new Date(dateString);
@@ -85,11 +88,7 @@ export default function TransactionDetailPage() {
 
   const isIncome = transaction.amount > 0;
 
-  const formattedAmount = new Intl.NumberFormat("en-US", {
-    style: "decimal",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(Math.abs(transaction.amount));
+  const formattedAmount = formatCurrency(Math.abs(transaction.amount));
 
   const formattedDate = new Date(transaction.date).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -102,69 +101,87 @@ export default function TransactionDetailPage() {
     : "—";
 
   return (
-    <PageWrapper>
-      <Content>
-        <Link href="/">
-          <BackLink>← Back</BackLink>
-        </Link>
+    <>
+      <BackgroundCanvas>
+        <FloatingSquare
+          color="rgba(34, 211, 238, 0.3)"
+          size="120px"
+          left="10%"
+          duration="18s"
+          delay="0s"
+        />
+        <FloatingSquare
+          color="rgba(169, 85, 247, 0.45)"
+          size="150px"
+          left="80%"
+          duration="22s"
+          delay="5s"
+        />
+      </BackgroundCanvas>
+      <PageWrapper>
+        <Content>
+          <Link href="/">
+            <BackLink>← Back</BackLink>
+          </Link>
 
-        <DetailTitle>{transaction.title}</DetailTitle>
+          <DetailTitle>{transaction.title}</DetailTitle>
 
-        <DetailAmount $isIncome={isIncome}>
-          {isIncome ? "+" : "-"} €
-          {formattedAmount}
-        </DetailAmount>
+          <DetailAmount $isIncome={isIncome}>
+            {isIncome ? "" : "-"}
+            {formattedAmount}
+          </DetailAmount>
 
-        <DetailMeta>Type: {isIncome ? "Income" : "Expense"}</DetailMeta>
+          <DetailMeta>Type: {isIncome ? "Income" : "Expense"}</DetailMeta>
 
-        <DetailMeta>
-          Category: {getIcon(transaction.category)} {transaction.category}
-        </DetailMeta>
+          <DetailMeta>
+            Category: {getIcon(transaction.category)} {transaction.category}
+          </DetailMeta>
 
-        <DetailMeta>Date: {formattedDate}</DetailMeta>
+          <DetailMeta>Date: {formattedDate}</DetailMeta>
 
-        <DetailMeta>Added: {addedTimestamp}</DetailMeta>
+          <DetailMeta>Added: {addedTimestamp}</DetailMeta>
 
-        {transaction.updatedAt &&
-          transaction.updatedAt !== transaction.createdAt && (
-            <DetailMeta>
-              Edited: {formatTimestamp(transaction.updatedAt)}
-            </DetailMeta>
+          {transaction.updatedAt &&
+            transaction.updatedAt !== transaction.createdAt && (
+              <DetailMeta>
+                Edited: {formatTimestamp(transaction.updatedAt)}
+              </DetailMeta>
+            )}
+
+          <DetailActions>
+            <EditLink href={`/transactions/${id}/edit`}>Edit</EditLink>
+
+            <ActionButton onClick={() => setIsDeleteModalOpen(true)}>
+              Delete
+            </ActionButton>
+          </DetailActions>
+
+          {isDeleteModalOpen && (
+            <DeleteModalOverlay>
+              <DeleteModalContainer role="dialog" aria-modal="true">
+                <DeleteConfirmationMessage>
+                  Are you sure you want to permanently delete this transaction?
+                </DeleteConfirmationMessage>
+                <DeleteModalButtonContainer>
+                  <DeleteModalButton
+                    type="button"
+                    $variant="destructive"
+                    onClick={handleDelete}
+                  >
+                    Confirm
+                  </DeleteModalButton>
+                  <DeleteModalButton
+                    type="button"
+                    onClick={() => setIsDeleteModalOpen(false)}
+                  >
+                    Cancel
+                  </DeleteModalButton>
+                </DeleteModalButtonContainer>
+              </DeleteModalContainer>
+            </DeleteModalOverlay>
           )}
-
-        <DetailActions>
-          <EditLink href={`/transactions/${id}/edit`}>Edit</EditLink>
-
-          <ActionButton onClick={() => setIsDeleteModalOpen(true)}>
-            Delete
-          </ActionButton>
-        </DetailActions>
-
-        {isDeleteModalOpen && (
-          <DeleteModalOverlay>
-            <DeleteModalContainer role="dialog" aria-modal="true">
-              <DeleteConfirmationMessage>
-                Are you sure you want to permanently delete this transaction?
-              </DeleteConfirmationMessage>
-              <DeleteModalButtonContainer>
-                <DeleteModalButton
-                  type="button"
-                  $variant="destructive"
-                  onClick={handleDelete}
-                >
-                  Confirm
-                </DeleteModalButton>
-                <DeleteModalButton
-                  type="button"
-                  onClick={() => setIsDeleteModalOpen(false)}
-                >
-                  Cancel
-                </DeleteModalButton>
-              </DeleteModalButtonContainer>
-            </DeleteModalContainer>
-          </DeleteModalOverlay>
-        )}
-      </Content>
-    </PageWrapper>
+        </Content>
+      </PageWrapper>
+    </>
   );
 }

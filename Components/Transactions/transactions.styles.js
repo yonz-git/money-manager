@@ -412,6 +412,7 @@ export const DetailTitle = styled.h2`
   font-size: 20px;
   font-weight: 600;
   margin: 16px 0 8px;
+  color: #ffffff;
 `;
 
 export const DetailAmount = styled.p`
@@ -423,13 +424,13 @@ export const DetailAmount = styled.p`
 
 export const DetailMeta = styled.p`
   font-size: 14px;
-  color: #444;
+  color: #a0a0c0;
   margin: 6px 0;
 `;
 
 export const BackLink = styled.span`
   font-size: 14px;
-  color: #333;
+  color: #a0a0c0;
   cursor: pointer;
   display: inline-block;
   margin-bottom: 8px;
@@ -450,13 +451,13 @@ export const EditLink = styled(Link)`
   flex: 1;
   padding: 10px;
   text-align: center;
-  border: 1px solid #1a1a1a;
+  border: 1px solid #4a4a6a;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  color: #1a1a1a;
-  background: #fff;
+  color: #ffffff;
+  background: #1c0069;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -464,7 +465,7 @@ export const EditLink = styled(Link)`
   box-sizing: border-box;
 
   &:hover {
-    background: #f5f5f5;
+    background: #2a0090;
   }
 `;
 
