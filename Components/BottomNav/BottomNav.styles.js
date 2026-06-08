@@ -6,7 +6,12 @@ export const StyledNav = styled.nav`
   left: 0;
   width: 100%;
   height: 60px;
-  background-color: #ff9ff2;
+  background: #ffd4f9;
+  background: linear-gradient(
+    1deg,
+    rgba(255, 212, 249, 1) 0%,
+    rgba(255, 159, 242, 1) 100%
+  );
 `;
 
 export const NavList = styled.ul`
@@ -26,12 +31,22 @@ export const NavItem = styled.li`
   transition: all 0.2s ease-in-out;
 
   &.active {
-    background-color: #da24c2;
+    background: #da24c2;
+    background: linear-gradient(
+      1deg,
+      rgba(218, 36, 194, 1) 0%,
+      rgba(255, 133, 239, 1) 100%
+    );
     font-weight: bold;
   }
 
   &:hover {
-    background-color: #eb4bd6;
+    background: #da24c2;
+    background: linear-gradient(
+      1deg,
+      rgba(218, 36, 194, 1) 100%,
+      rgba(255, 133, 239, 1) 0%
+    );
   }
 
   a {
