@@ -229,7 +229,7 @@ export const EditButton = styled.button`
 
   &:hover {
     transform: scale(1.1);
-    color: #2f25c8;
+    color: #564ce2;
   }
 
   &:active {
@@ -392,7 +392,6 @@ export const ErrorMessage = styled.p`
   font-size: 14px;
   color: #dc2626;
 `;
-
 
 const floatAndSpin = keyframes`
   0% {
