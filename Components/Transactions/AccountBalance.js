@@ -1,10 +1,7 @@
-import { BalanceCard, BalanceLabel, BalanceValue } from './transactions.styles';
+import { BalanceCard, BalanceLabel, BalanceValue } from "./transactions.styles";
+import { formatCurrency } from "../../utils/formatCurrency";
 
-
-export default function AccountBalance({transactions = [] }) {
-  
-  
-
+export default function AccountBalance({ transactions = [] }) {
   function calculateTotal(accumulator, currentTransaction) {
     const amount = Number(currentTransaction.amount) || 0;
     return accumulator + amount;

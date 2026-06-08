@@ -1,15 +1,17 @@
-import { Header, Title, ToggleButton } from './transactions.styles';
+import { Header, Title, ToggleButton, StyledLogo } from "./transactions.styles";
 
 export default function TransactionsHeader({ isFormOpen, onToggleForm }) {
   return (
     <Header>
-      <Title>Activities</Title>
+      <StyledLogo src="/CoinOink.png" alt="Money Manager Logo" />
+      <Title>Coin Oink</Title>
+
       <ToggleButton
         onClick={onToggleForm}
         $isOpen={isFormOpen}
         aria-label="Toggle Add Transaction Form"
       >
-        {isFormOpen ? '×' : '+'}
+        {isFormOpen ? "×" : "+"}
       </ToggleButton>
     </Header>
   );

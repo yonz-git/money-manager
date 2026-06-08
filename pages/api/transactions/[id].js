@@ -7,6 +7,15 @@ export default async function handler(request, response) {
   try {
     await dbConnect();
 
+    if (request.method === "GET") {
+      const transaction = await Transaction.findById(id);
+
+      if (!transaction) {
+        return response.status(404).json({ status: "Not Found" });
+      }
+      return response.status(200).json(transaction);
+    }
+
     if (request.method === "PUT") {
       const { amount, title, category, date, type } = request.body;
 
@@ -33,8 +42,6 @@ export default async function handler(request, response) {
       return response.status(200).json(updatedTransaction);
     }
     if (request.method === "DELETE") {
-      const { id } = request.query;
-
       if (!id) {
         response
           .status(400)
