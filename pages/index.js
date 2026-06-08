@@ -3,6 +3,7 @@ import {
   BackgroundCanvas,
   FloatingSquare,
 } from "../Components/Transactions/transactions.styles";
+
 export default function HomePage() {
   return (
     <>

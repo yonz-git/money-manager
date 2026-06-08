@@ -1,4 +1,5 @@
 import GlobalStyle from "../styles";
+import BottomNav from "@/Components/BottomNav/BottomNav";
 import { SWRConfig } from "swr";
 
 async function fetcher(url) {
@@ -23,6 +24,7 @@ export default function App({ Component, pageProps }) {
       <SWRConfig value={{ fetcher }}>
         <GlobalStyle />
         <Component {...pageProps} />
+        <BottomNav />
       </SWRConfig>
     </>
   );

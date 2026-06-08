@@ -56,11 +56,11 @@ export default function TransactionsPage() {
     }
 
     if (activeTypeFilter && activeTypeFilter !== "All") {
-      result = result.filter((transaction) => {
+      result = result.filter((transaction) =>
         activeTypeFilter === "Income"
           ? transaction.amount > 0
-          : transaction.amount < 0;
-      });
+          : transaction.amount < 0
+      );
     }
 
     const transactionsClone = [...result];
