@@ -48,6 +48,7 @@ export default function TransactionDetailPage() {
   const router = useRouter();
   const { id } = router.query;
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeletedSuccessfully, setIsDeletedSuccessfully] = useState(false);
 
   const {
     data: transaction,
@@ -61,7 +62,12 @@ export default function TransactionDetailPage() {
     });
 
     if (response.ok) {
-      router.push("/");
+      setIsDeleteModalOpen(false);
+      setIsDeletedSuccessfully(true);
+
+      setTimeout(() => {
+        router.push("/");
+      }, 1500);
     }
   }
 
@@ -177,6 +183,16 @@ export default function TransactionDetailPage() {
                     Cancel
                   </DeleteModalButton>
                 </DeleteModalButtonContainer>
+              </DeleteModalContainer>
+            </DeleteModalOverlay>
+          )}
+
+          {isDeletedSuccessfully && (
+            <DeleteModalOverlay>
+              <DeleteModalContainer>
+                <DeleteConfirmationMessage>
+                  ✅ Transaction successfully deleted!
+                </DeleteConfirmationMessage>
               </DeleteModalContainer>
             </DeleteModalOverlay>
           )}
