@@ -473,7 +473,7 @@ export const DropdownTrigger = styled.button`
   height: 40px;
   border: 1px solid #bdbdbd;
   border-radius: 4px;
-  background: #a499c4;
+  background: #ffffff;
   padding: 0 12px;
   font-size: 14px;
   text-align: left;
@@ -490,7 +490,7 @@ export const DropdownMenu = styled.div`
   top: 46px; 
   left: 0;
   width: 100%;
-  background: #a499c4;
+  background: #ffffff;
   border: 1px solid #bdbdbd;
   border-radius: 4px;
   z-index: 10;
@@ -520,7 +520,7 @@ export const DropdownItem = styled.button`
   transition: background 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(97, 97, 97, 0.42);
   }
 `;
 
