@@ -16,7 +16,13 @@ import {
   VisuallyHiddenInput,
   SubmitButton,
   ErrorText,
-  ButtonRow,
+  ModalOverlay,
+  FormWrapper,
+  StaggeredFieldset,     
+  StaggeredButtonRow,     
+  SingleButtonWrapper,
+  FormHeader,  
+  CloseButton
 } from "./TransactionForm.styles";
 
 function getTodayDateString() {
@@ -29,6 +35,7 @@ function getTodayDateString() {
 
 export default function TransactionForm({
   onSaveTransaction,
+  isOpen,
   categoriesData = [],
   initialData,
   onCancel,
@@ -119,153 +126,153 @@ export default function TransactionForm({
 
   return (
     <Card>
-      <Heading>
-        {isEditMode ? "Update Transaction" : "Add New Transaction"}
-      </Heading>
+     
+      <ModalOverlay $isOpen={isOpen} onClick={onCancel}>
+        <FormWrapper onClick={(event) => event.stopPropagation()}>
+          
+        
+          <FormHeader>
+            <Heading $index={0}>
+              {isEditMode ? "Update Transaction" : "Add New Transaction"}
+            </Heading>
+            <CloseButton type="button" onClick={onCancel}>×</CloseButton>
+          </FormHeader>
+          <form onSubmit={handleSubmit} noValidate>
+            
+          
+            <Field $index={1}>
+              <LabelText htmlFor="title">Transaction Title *</LabelText>
+              <InputElement
+                id="title"
+                name="title"
+                type="text"
+                placeholder="e.g., Weekly Groceries"
+                value={formData.title}
+                onChange={(event) =>
+                  setFormData({ ...formData, title: event.target.value })
+                }
+                $hasError={!!errors.title}
+              />
+              {errors.title && <ErrorText>{errors.title}</ErrorText>}
+            </Field>
 
-      <form onSubmit={handleSubmit} noValidate>
-        <Field>
-          <LabelText htmlFor="title">Transaction Title *</LabelText>
-          <InputElement
-            id="title"
-            name="title"
-            type="text"
-            placeholder="e.g., Weekly Groceries"
-            value={formData.title}
-            onChange={(event) =>
-              setFormData({ ...formData, title: event.target.value })
-            }
-            $hasError={!!errors.title}
-          />
-          {errors.title && <ErrorText>{errors.title}</ErrorText>}
-        </Field>
+            
+            <Field $index={2}>
+              <LabelText htmlFor="amount">Transaction Amount *</LabelText>
+              <InputElement
+                id="amount"
+                name="amount"
+                type="number"
+                inputMode="decimal"
+                step="0.01"
+                min="0.01"
+                placeholder="0.00"
+                value={formData.amount}
+                onChange={handleAmountChange}
+                onKeyDown={handleAmountKeyDown}
+                $hasError={!!errors.amount}
+              />
+              {errors.amount && <ErrorText>{errors.amount}</ErrorText>}
+            </Field>
 
-        <Field>
-          <LabelText htmlFor="amount">Transaction Amount *</LabelText>
-          <InputElement
-            id="amount"
-            name="amount"
-            type="number"
-            inputMode="decimal"
-            step="0.01"
-            min="0.01"
-            placeholder="0.00"
-            value={formData.amount}
-            onChange={handleAmountChange}
-            onKeyDown={handleAmountKeyDown}
-            $hasError={!!errors.amount}
-          />
-          {errors.amount && <ErrorText>{errors.amount}</ErrorText>}
-        </Field>
-
-        <Field>
-          <LabelText htmlFor="category">Transaction Category *</LabelText>
-          <SelectWrapper>
-            <SelectElement
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={(event) =>
-                setFormData({ ...formData, category: event.target.value })
-              }
-              $hasError={!!errors.category}
-            >
-              <option value="">Please select a category</option>
-              {categoriesData.map((item) => {
-                const key = item._id?.$oid ?? item._id ?? item.category;
-                return (
-                  <option key={key} value={item.category}>
-                    {item.category}
-                  </option>
-                );
-              })}
-            </SelectElement>
-            <ChevronIcon aria-hidden="true">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#666"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </ChevronIcon>
-          </SelectWrapper>
-          {errors.category && <ErrorText>{errors.category}</ErrorText>}
-        </Field>
-
-        <fieldset>
-          <legend>Transaction Type *</legend>
-          <RadioGroup>
-            {["Income", "Expense"].map((transactionType) => (
-              <RadioLabel
-                key={transactionType}
-                htmlFor={`type-${transactionType}`}
-              >
-                <RadioCircle
-                  $checked={formData.type === transactionType}
-                  $value={transactionType}
-                >
-                  {formData.type === transactionType && <RadioDot />}
-                </RadioCircle>
-                <VisuallyHiddenInput
-                  id={`type-${transactionType}`}
-                  name="transactionType"
-                  type="radio"
-                  value={transactionType}
-                  checked={formData.type === transactionType}
+           
+            <Field $index={3}>
+              <LabelText htmlFor="category">Transaction Category *</LabelText>
+              <SelectWrapper>
+                <SelectElement
+                  id="category"
+                  name="category"
+                  value={formData.category}
                   onChange={(event) =>
-                    setFormData({ ...formData, type: event.target.value })
+                    setFormData({ ...formData, category: event.target.value })
                   }
-                />
-                {transactionType}
-              </RadioLabel>
-            ))}
-          </RadioGroup>
-          {errors.type && <ErrorText>{errors.type}</ErrorText>}
-        </fieldset>
+                  $hasError={!!errors.category}
+                >
+                  <option value="">Please select a category</option>
+                  {categoriesData.map((item) => {
+                    const key = item._id?.$oid ?? item._id ?? item.category;
+                    return (
+                      <option key={key} value={item.category}>
+                        {item.category}
+                      </option>
+                    );
+                  })}
+                </SelectElement>
+                <ChevronIcon aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </ChevronIcon>
+              </SelectWrapper>
+              {errors.category && <ErrorText>{errors.category}</ErrorText>}
+            </Field>
 
-        <Field>
-          <LabelText htmlFor="date">Transaction Date *</LabelText>
-          <InputElement
-            id="date"
-            name="date"
-            type="date"
-            value={formData.date}
-            onChange={(event) =>
-              setFormData({ ...formData, date: event.target.value })
-            }
-            $hasError={!!errors.date}
-          />
-          {errors.date && <ErrorText>{errors.date}</ErrorText>}
-        </Field>
+         
+            <StaggeredFieldset $index={4}>
+              <legend>Transaction Type *</legend>
+              <RadioGroup>
+                {["Income", "Expense"].map((transactionType) => (
+                  <RadioLabel key={transactionType} htmlFor={`type-${transactionType}`}>
+                    <RadioCircle $checked={formData.type === transactionType} $value={transactionType}>
+                      {formData.type === transactionType && <RadioDot />}
+                    </RadioCircle>
+                    <VisuallyHiddenInput
+                      id={`type-${transactionType}`}
+                      name="transactionType"
+                      type="radio"
+                      value={transactionType}
+                      checked={formData.type === transactionType}
+                      onChange={(event) =>
+                        setFormData({ ...formData, type: event.target.value })
+                      }
+                    />
+                    {transactionType}
+                  </RadioLabel>
+                ))}
+              </RadioGroup>
+              {errors.type && <ErrorText>{errors.type}</ErrorText>}
+            </StaggeredFieldset>
 
-        {isEditMode ? (
-          <ButtonRow>
-            <SubmitButton type="submit">Save</SubmitButton>
-            <SubmitButton
-              type="button"
-              onClick={() => setShowDiscardDialog(true)}
-            >
-              Cancel
-            </SubmitButton>
-          </ButtonRow>
-        ) : (
-          <SubmitButton type="submit">Add Transaction</SubmitButton>
-        )}
+          
+            <Field $index={5}>
+              <LabelText htmlFor="date">Transaction Date *</LabelText>
+              <InputElement
+                id="date"
+                name="date"
+                type="date"
+                value={formData.date}
+                onChange={(event) =>
+                  setFormData({ ...formData, date: event.target.value })
+                }
+                $hasError={!!errors.date}
+              />
+              {errors.date && <ErrorText>{errors.date}</ErrorText>}
+            </Field>
 
-        {errors.submit && <ErrorText>{errors.submit}</ErrorText>}
-        {showDiscardDialog && (
-          <DiscardDialog
-            onDiscard={onCancel}
-            onKeepEditing={() => setShowDiscardDialog(false)}
-          />
-        )}
-      </form>
+          
+            {isEditMode ? (
+              <StaggeredButtonRow $index={6}>
+                <SubmitButton type="submit">Save</SubmitButton>
+                <SubmitButton type="button" onClick={() => setShowDiscardDialog(true)}>
+                  Cancel
+                </SubmitButton>
+              </StaggeredButtonRow>
+            ) : (
+              <SingleButtonWrapper $index={6}>
+                <SubmitButton type="submit">Add Transaction</SubmitButton>
+              </SingleButtonWrapper>
+            )}
+
+            {errors.submit && <ErrorText>{errors.submit}</ErrorText>}
+            {showDiscardDialog && (
+              <DiscardDialog
+                onDiscard={onCancel}
+                onKeepEditing={() => setShowDiscardDialog(false)}
+              />
+            )}
+          </form>
+        </FormWrapper>
+      </ModalOverlay>
     </Card>
   );
 }

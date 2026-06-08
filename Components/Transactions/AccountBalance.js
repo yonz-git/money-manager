@@ -19,7 +19,7 @@ export default function AccountBalance({transactions = [] }) {
     });
 
     if (amount < 0) {
-      return `€-${absoluteValue}`;
+      return `-€${absoluteValue}`;
     }
     
     return `€${absoluteValue}`;

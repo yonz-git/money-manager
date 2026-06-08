@@ -202,10 +202,18 @@ export const ToggleButton = styled.button`
   right: 0px;
 `;
 
-export const FormWrapper = styled.div`
-  margin-bottom: 20px;
-  width: 100%;
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
 `;
+
+const fadeOut = keyframes`
+  from { opacity: 1; } to { opacity: 0; }
+`;
+
+
+
+
 
 export const Buttons = styled.div`
   display: flex;
@@ -417,6 +425,27 @@ const gradientShift = keyframes`
   100% { background-position: 0% 50%; }
 `;
 
+export const FloatingAsset = styled.img`
+  position: absolute;
+  top: 100%; 
+  
+
+  left: ${(props) => props.$left || '10%'};
+  width: ${(props) => props.$size || '80px'};
+  height: ${(props) => props.$size || '80px'};
+  
+
+  object-fit: contain; 
+  
+
+  animation: ${floatAndSpin} ${(props) => props.$duration || '15s'} linear infinite;
+  animation-delay: ${(props) => props.$delay || '0s'};
+  
+
+  will-change: transform, opacity;
+  opacity: 0.2; 
+`;
+
 export const BackgroundCanvas = styled.div`
   position: fixed;
   top: 0;
@@ -432,25 +461,68 @@ export const BackgroundCanvas = styled.div`
   z-index: -1;
 `;
 
-export const FloatingSquare = styled.div`
-  position: absolute;
-  top: 100%;
 
-  background-color: ${(props) => props.color || "#3b82f6"};
-  border-radius: 12px;
-
-  box-shadow:
-    0 0 10px ${(props) => props.color || "rgba(59, 130, 246, 0.5)"},
-    0 0 30px ${(props) => props.color || "rgba(59, 130, 246, 0.3)"};
-
-  filter: blur(1px);
-
-  animation: ${floatAndSpin} ${(props) => props.duration || "15s"} linear
-    infinite;
-  animation-delay: ${(props) => props.delay || "0s"};
-  will-change: transform, opacity;
-
-  width: ${(props) => props.size || "80px"};
-  height: ${(props) => props.size || "80px"};
-  left: ${(props) => props.left || "10%"};
+export const DropdownContainer = styled.div`
+  position: relative;
+  flex: 1;
 `;
+
+
+export const DropdownTrigger = styled.button`
+  width: 100%;
+  height: 40px;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  background: #a499c4;
+  padding: 0 12px;
+  font-size: 14px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  color: #000;
+`;
+
+
+export const DropdownMenu = styled.div`
+  position: absolute;
+  top: 46px; 
+  left: 0;
+  width: 100%;
+  background: #a499c4;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+
+
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s ease;
+  transform-origin: top center;
+
+ 
+  opacity: ${(props) => (props.$isOpen ? 1 : 0)};
+  transform: ${(props) => (props.$isOpen ? "translateY(0) scaleY(1)" : "translateY(-10px) scaleY(0.95)")};
+  visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
+`;
+
+
+export const DropdownItem = styled.button`
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+`;
+
+
+

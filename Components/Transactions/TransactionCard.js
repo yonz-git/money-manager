@@ -81,7 +81,7 @@ export default function TransactionCard({
       </CardLeft>
 
       <CardRight>
-        <Amount $income={isIncome}>
+        <Amount $income={isIncome}>€
           {isIncome ? "" : "-"}
           {new Intl.NumberFormat("en-US", {
             style: "decimal",

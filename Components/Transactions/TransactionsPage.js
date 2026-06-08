@@ -10,10 +10,8 @@ import AccountBalance from "./AccountBalance";
 import {
   PageWrapper,
   Content,
-  FormWrapper,
   ErrorContainer,
   ErrorTitle,
-  ErrorMessage,
 } from "./transactions.styles";
 
 async function fetcher(url) {
@@ -142,7 +140,7 @@ export default function TransactionsPage() {
     }
   }
 
-  return (
+    return (
     <PageWrapper>
       <TransactionsHeader
         isFormOpen={isFormOpen}
@@ -152,30 +150,34 @@ export default function TransactionsPage() {
         {error && (
           <ErrorContainer>
             <ErrorTitle>Database Sync Error</ErrorTitle>
-            <ErrorMessage>
-              We are unable to load your accounts right now. Please try again
-              later.
-            </ErrorMessage>
+            {/* Changed from ErrorMessage to ErrorTitle or standard paragraph to avoid crashes */}
+            <ErrorTitle style={{ fontWeight: 400 }}>
+              We are unable to load your accounts right now. Please try again later.
+            </ErrorTitle>
           </ErrorContainer>
         )}
 
+        {/* ✅ REMOVED the broken FormWrapper completely since TransactionForm handles its own layout modal */}
         {isFormOpen && (
-          <FormWrapper>
-            <TransactionForm
-              onSaveTransaction={handleAddTransaction}
-              categoriesData={categoriesList}
-            />
-          </FormWrapper>
+          <TransactionForm
+            isOpen={isFormOpen} /* Pass down the state toggle flag */
+            onSaveTransaction={handleAddTransaction}
+            categoriesData={categoriesList}
+            onCancel={handleToggleForm}
+          />
         )}
 
+        {/* ✅ Cleaned up edit mode wrapper too */}
         {editingTransaction && (
           <TransactionForm
+            isOpen={Boolean(editingTransaction)} /* Open if data exists */
             onSaveTransaction={handleUpdateTransaction}
             categoriesData={categoriesList}
             initialData={editingTransaction}
             onCancel={handleCancelEdit}
           />
         )}
+        
         <AccountBalance transactions={sortedTransactions} />
         <TransactionsControls
           sortBy={sortBy}
