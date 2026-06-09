@@ -4,7 +4,8 @@ import {
   DropdownContainer, 
   DropdownTrigger, 
   DropdownMenu, 
-  DropdownItem 
+  DropdownItem,
+  DropdownArrow 
 } from "./transactions.styles";
 import TransactionsFilter from "../TransactionsFilter/TransactionsFilter";
 import TransactionsTypeFilter from "../TransactionsTypeFilter/TransactionsTypeFilter";
@@ -52,7 +53,7 @@ export default function TransactionsControls({
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             <span>{sortLabels[sortBy] || "Sort"}</span>
-            <span style={{ fontSize: "10px", marginLeft: "8px" }}>▼</span>
+            <DropdownArrow>▼</DropdownArrow>
           </DropdownTrigger>
 
           <DropdownMenu $isOpen={isDropdownOpen}>

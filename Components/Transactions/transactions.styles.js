@@ -1,5 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import Link from "next/link";
+import Image from "next/image"; 
+
 
 export const PageWrapper = styled.div`
   max-width: 420px;
@@ -230,19 +232,14 @@ export const ListWrapper = styled.div`
   }
 `;
 
-const fadeIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-  `;
+
 
 export const FormWrapper = styled.div`
   margin-bottom: 20px;
   width: 100%;
 `;
 
-const fadeOut = keyframes`
-  from { opacity: 1; } to { opacity: 0; }
-`;
+
 
 export const Buttons = styled.div`
   display: flex;
@@ -533,22 +530,17 @@ const gradientShift = keyframes`
   100% { background-position: 0% 50%; }
 `;
 
-export const FloatingAsset = styled.img`
+export const FloatingAsset = styled(Image)`
   position: absolute;
   top: 100%;
-
-  left: ${(props) => props.$left || "10%"};
-  width: ${(props) => props.$size || "80px"};
-  height: ${(props) => props.$size || "80px"};
-
-  object-fit: contain;
-
-  animation: ${floatAndSpin} ${(props) => props.$duration || "15s"} linear
-    infinite;
-  animation-delay: ${(props) => props.$delay || "0s"};
-
-  will-change: transform, opacity;
+  left: ${(props) => props.$left || '10%'};
+  width: ${(props) => props.$size || '80px'} !important;
+  height: ${(props) => props.$size || '80px'} !important;
+  object-fit: contain; 
   opacity: 0.2;
+  will-change: transform, opacity;
+  animation: ${floatAndSpin} ${(props) => props.$duration || '15s'} linear infinite;
+  animation-delay: ${(props) => props.$delay || '0s'};
 `;
 
 export const BackgroundCanvas = styled.div`
@@ -591,24 +583,16 @@ export const DropdownMenu = styled.div`
   top: 46px;
   left: 0;
   width: 100%;
-  background: #ffffff;
+  background: #fcfcfc;
   border: 1px solid #bdbdbd;
   border-radius: 4px;
   z-index: 10;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   overflow: hidden;
-
-  transition:
-    opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-    visibility 0.25s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
   transform-origin: top center;
-
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
-  transform: ${(props) =>
-    props.$isOpen
-      ? "translateY(0) scaleY(1)"
-      : "translateY(-10px) scaleY(0.95)"};
+  transform: ${(props) => (props.$isOpen ? "translateY(0) scaleY(1)" : "translateY(-10px) scaleY(0.95)")};
   visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
 `;
 
@@ -621,9 +605,13 @@ export const DropdownItem = styled.button`
   border: none;
   cursor: pointer;
   color: #000;
-  transition: background 0.2s ease;
-
   &:hover {
-    background: rgba(97, 97, 97, 0.42);
+    background: rgba(143, 143, 143, 0.25);
   }
+`;
+
+
+export const DropdownArrow = styled.span`
+  font-size: 10px;
+  margin-left: 8px;
 `;

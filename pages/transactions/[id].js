@@ -102,13 +102,13 @@ export default function TransactionDetailPage() {
 
   return (
     <>
-      <BackgroundCanvas>
-            <FloatingAsset src="/piggy-coin.png" alt="" $left="5%" $size="170px" $duration="12s" $delay="1s" />
-            <FloatingAsset src="/piggy-coin.png" alt="" $left="25%" $size="170px" $duration="9s" $delay="12s" />
-            <FloatingAsset src="/piggy-coin.png" alt="" $left="45%" $size="170px" $duration="11s" $delay="4s" />
-            <FloatingAsset src="/piggy-coin.png" alt="" $left="65%" $size="170px" $duration="8s" $delay="8s" />
-            <FloatingAsset src="/piggy-coin.png" alt="" $left="85%" $size="170px" $duration="8s" $delay="10s" />
-          </BackgroundCanvas>
+     <BackgroundCanvas>
+  <FloatingAsset src="/piggy-coin.png" alt="" width={170} height={170} $left="5%" $size="170px" $duration="12s" $delay="1s" />
+  <FloatingAsset src="/piggy-coin.png" alt="" width={170} height={170} $left="25%" $size="170px" $duration="9s" $delay="12s" />
+  <FloatingAsset src="/piggy-coin.png" alt="" width={170} height={170} $left="45%" $size="170px" $duration="11s" $delay="4s" />
+  <FloatingAsset src="/piggy-coin.png" alt="" width={170} height={170} $left="65%" $size="170px" $duration="8s" $delay="8s" />
+  <FloatingAsset src="/piggy-coin.png" alt="" width={170} height={170} $left="85%" $size="170px" $duration="8s" $delay="10s" />
+</BackgroundCanvas>
       <PageWrapper>
         <Content>
           <Link href="/">

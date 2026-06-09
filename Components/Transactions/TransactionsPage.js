@@ -12,7 +12,14 @@ import {
   Content,
   ErrorContainer,
   ErrorTitle,
+  ErrorText 
 } from "./transactions.styles";
+
+async function fetcher(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Network error");
+  return response.json();
+}
 
 export default function TransactionsPage() {
   const [sortBy, setSortBy] = useState("Newest");
@@ -21,21 +28,12 @@ export default function TransactionsPage() {
   const [activeFilter, setActiveFilter] = useState(null);
   const [activeTypeFilter, setActiveTypeFilter] = useState("All");
 
-  const {
-    data: transactionsData,
-    error,
-    isLoading,
-    mutate,
-  } = useSWR("/api/transactions");
-
-  const { data: categoriesData } = useSWR("/api/category");
+  const { data: transactionsData, error, isLoading, mutate } = useSWR("/api/transactions", fetcher);
+  const { data: categoriesData } = useSWR("/api/category", fetcher);
 
   const transactionsList = transactionsData
-    ? Array.isArray(transactionsData)
-      ? transactionsData
-      : (transactionsData.transactions ?? [])
+    ? Array.isArray(transactionsData) ? transactionsData : (transactionsData.transactions ?? [])
     : [];
-
   const categoriesList = Array.isArray(categoriesData) ? categoriesData : [];
 
   function handleToggleForm() {
@@ -45,55 +43,23 @@ export default function TransactionsPage() {
 
   function getSortedAndFilterTransactions() {
     if (transactionsList.length === 0) return [];
-
     let result = transactionsList;
     if (activeFilter) {
-      result = transactionsList.filter(
-        (transaction) => transaction.category === activeFilter
-      );
+      result = transactionsList.filter((t) => t.category === activeFilter);
     }
-
     if (activeTypeFilter && activeTypeFilter !== "All") {
-      result = result.filter((transaction) =>
-        activeTypeFilter === "Income"
-          ? transaction.amount > 0
-          : transaction.amount < 0
-      );
+      result = result.filter((t) => activeTypeFilter === "Income" ? t.amount > 0 : t.amount < 0);
     }
-
-    const transactionsClone = [...result];
-
-    if (sortBy === "Newest") {
-      transactionsClone.sort(function (a, b) {
-        return b.date.localeCompare(a.date);
-      });
-    } else if (sortBy === "Oldest") {
-      transactionsClone.sort(function (a, b) {
-        return a.date.localeCompare(b.date);
-      });
-    } else if (sortBy === "AmountHigh") {
-      transactionsClone.sort(function (a, b) {
-        return b.amount - a.amount;
-      });
-    } else if (sortBy === "AmountLow") {
-      transactionsClone.sort(function (a, b) {
-        return a.amount - b.amount;
-      });
-    }
-
-    return transactionsClone;
+    const clone = [...result];
+    if (sortBy === "Newest") clone.sort((a, b) => b.date.localeCompare(a.date));
+    else if (sortBy === "Oldest") clone.sort((a, b) => a.date.localeCompare(b.date));
+    else if (sortBy === "AmountHigh") clone.sort((a, b) => b.amount - a.amount);
+    else if (sortBy === "AmountLow") clone.sort((a, b) => a.amount - b.amount);
+    return clone;
   }
 
   const sortedTransactions = getSortedAndFilterTransactions();
   const shouldShowEmptyState = !isLoading && sortedTransactions.length === 0;
-
-  function handleApplyFilter(category) {
-    setActiveFilter(category);
-  }
-
-  function handleApplyTypeFilter(type) {
-    setActiveTypeFilter(type);
-  }
 
   async function handleAddTransaction(formData) {
     const response = await fetch("/api/transactions", {
@@ -101,97 +67,82 @@ export default function TransactionsPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
-
     if (response.ok) {
       mutate();
       setIsFormOpen(false);
     }
   }
 
-  function handleEditTransaction(transaction) {
-    setEditingTransaction(transaction);
-    setIsFormOpen(false);
-  }
-
-  function handleCancelEdit() {
-    setEditingTransaction(null);
-  }
+ function handleEditTransaction(transaction) {
+  setIsFormOpen(false); 
+  setEditingTransaction(transaction);
+}
 
   async function handleUpdateTransaction(formData) {
-    const response = await fetch(
-      `/api/transactions/${editingTransaction._id}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      }
-    );
-
+    const response = await fetch(`/api/transactions/${editingTransaction._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
     if (response.ok) {
       mutate();
-      // close the edit form after successful save
       setEditingTransaction(null);
     }
   }
 
-    return (
+  return (
     <PageWrapper>
-      <TransactionsHeader
-        isFormOpen={isFormOpen}
-        onToggleForm={handleToggleForm}
-      />
+      <TransactionsHeader isFormOpen={isFormOpen} onToggleForm={handleToggleForm} />
       <Content>
         {error && (
           <ErrorContainer>
             <ErrorTitle>Database Sync Error</ErrorTitle>
-            {/* Changed from ErrorMessage to ErrorTitle or standard paragraph to avoid crashes */}
-            <ErrorTitle style={{ fontWeight: 400 }}>
-              We are unable to load your accounts right now. Please try again later.
-            </ErrorTitle>
+            
+            <ErrorText>We are unable to load your accounts right now. Please try again later.</ErrorText>
           </ErrorContainer>
         )}
 
-        {/* ✅ REMOVED the broken FormWrapper completely since TransactionForm handles its own layout modal */}
-        {isFormOpen && (
-          <TransactionForm
-            isOpen={isFormOpen} /* Pass down the state toggle flag */
-            onSaveTransaction={handleAddTransaction}
-            categoriesData={categoriesList}
-            onCancel={handleToggleForm}
-          />
-        )}
+       
+        <TransactionForm
+  key="create-form" 
+  isOpen={isFormOpen}
+  onSaveTransaction={handleAddTransaction}
+  categoriesData={categoriesList}
+  onCancel={handleToggleForm}
+/>
 
-        {/* ✅ Cleaned up edit mode wrapper too */}
-        {editingTransaction && (
-          <TransactionForm
-            isOpen={Boolean(editingTransaction)} /* Open if data exists */
-            onSaveTransaction={handleUpdateTransaction}
-            categoriesData={categoriesList}
-            initialData={editingTransaction}
-            onCancel={handleCancelEdit}
-          />
-        )}
-        
+{editingTransaction && (
+  <TransactionForm
+    key={`edit-form-${editingTransaction._id}`} 
+    isOpen={Boolean(editingTransaction)}
+    onSaveTransaction={handleUpdateTransaction}
+    categoriesData={categoriesList}
+    initialData={editingTransaction}
+    onCancel={() => setEditingTransaction(null)}
+  />
+)}
         <AccountBalance transactions={sortedTransactions} />
         <TransactionsControls
           sortBy={sortBy}
           setSortBy={setSortBy}
           categoriesList={categoriesList}
           activeFilter={activeFilter}
-          onApplyFilter={handleApplyFilter}
+          onApplyFilter={(cat) => setActiveFilter(cat)}
           onClearFilter={() => setActiveFilter(null)}
           activeTypeFilter={activeTypeFilter}
-          onTypeFilterChange={handleApplyTypeFilter}
+          onTypeFilterChange={(type) => setActiveTypeFilter(type)}
         />
 
         {isLoading ? (
           <TransactionsSkeleton />
         ) : shouldShowEmptyState ? (
-          <TransactionsEmptyState
-            isFiltered={activeFilter !== null || activeTypeFilter !== "All"}
-          />
+          <TransactionsEmptyState isFiltered={activeFilter !== null || activeTypeFilter !== "All"} />
         ) : (
-          <TransactionsList transactions={sortedTransactions} />
+          <TransactionsList
+            transactions={sortedTransactions}
+            onDeleteSuccess={mutate}
+            onEditTransaction={handleEditTransaction}
+          />
         )}
       </Content>
     </PageWrapper>
