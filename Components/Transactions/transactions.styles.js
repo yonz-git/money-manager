@@ -4,8 +4,11 @@ import Link from "next/link";
 export const PageWrapper = styled.div`
   max-width: 420px;
   margin: 0 auto;
-  min-height: 100vh;
-  background: #fff;
+
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
   background: transparent !important;
   font-family: Arial, sans-serif;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
@@ -61,6 +64,12 @@ export const ToggleButton = styled.button`
 export const Content = styled.div`
   padding: 16px;
   background: transparent !important;
+
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
 `;
 
 export const ControlsRow = styled.div`
@@ -207,6 +216,12 @@ export const ListWrapper = styled.div`
   flex-direction: column;
   gap: 16px;
   width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   & > * {
     background: #350932be;
@@ -214,8 +229,6 @@ export const ListWrapper = styled.div`
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   }
 `;
-
-
 
 const fadeIn = keyframes`
   from { opacity: 0; }
@@ -230,10 +243,6 @@ export const FormWrapper = styled.div`
 const fadeOut = keyframes`
   from { opacity: 1; } to { opacity: 0; }
 `;
-
-
-
-
 
 export const Buttons = styled.div`
   display: flex;
@@ -526,23 +535,20 @@ const gradientShift = keyframes`
 
 export const FloatingAsset = styled.img`
   position: absolute;
-  top: 100%; 
-  
+  top: 100%;
 
-  left: ${(props) => props.$left || '10%'};
-  width: ${(props) => props.$size || '80px'};
-  height: ${(props) => props.$size || '80px'};
-  
+  left: ${(props) => props.$left || "10%"};
+  width: ${(props) => props.$size || "80px"};
+  height: ${(props) => props.$size || "80px"};
 
-  object-fit: contain; 
-  
+  object-fit: contain;
 
-  animation: ${floatAndSpin} ${(props) => props.$duration || '15s'} linear infinite;
-  animation-delay: ${(props) => props.$delay || '0s'};
-  
+  animation: ${floatAndSpin} ${(props) => props.$duration || "15s"} linear
+    infinite;
+  animation-delay: ${(props) => props.$delay || "0s"};
 
   will-change: transform, opacity;
-  opacity: 0.2; 
+  opacity: 0.2;
 `;
 
 export const BackgroundCanvas = styled.div`
@@ -559,12 +565,10 @@ export const BackgroundCanvas = styled.div`
   z-index: -1;
 `;
 
-
 export const DropdownContainer = styled.div`
   position: relative;
   flex: 1;
 `;
-
 
 export const DropdownTrigger = styled.button`
   width: 100%;
@@ -582,10 +586,9 @@ export const DropdownTrigger = styled.button`
   color: #000;
 `;
 
-
 export const DropdownMenu = styled.div`
   position: absolute;
-  top: 46px; 
+  top: 46px;
   left: 0;
   width: 100%;
   background: #ffffff;
@@ -595,16 +598,19 @@ export const DropdownMenu = styled.div`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 
-
-  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s ease;
+  transition:
+    opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.25s ease;
   transform-origin: top center;
 
- 
   opacity: ${(props) => (props.$isOpen ? 1 : 0)};
-  transform: ${(props) => (props.$isOpen ? "translateY(0) scaleY(1)" : "translateY(-10px) scaleY(0.95)")};
+  transform: ${(props) =>
+    props.$isOpen
+      ? "translateY(0) scaleY(1)"
+      : "translateY(-10px) scaleY(0.95)"};
   visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
 `;
-
 
 export const DropdownItem = styled.button`
   width: 100%;
@@ -621,6 +627,3 @@ export const DropdownItem = styled.button`
     background: rgba(97, 97, 97, 0.42);
   }
 `;
-
-
-
