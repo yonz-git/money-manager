@@ -1,11 +1,16 @@
 import styled, { keyframes } from "styled-components";
 import Link from "next/link";
+import Image from "next/image"; 
+
 
 export const PageWrapper = styled.div`
   max-width: 420px;
   margin: 0 auto;
-  min-height: 100vh;
-  background: #fff;
+
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
   background: transparent !important;
   font-family: Arial, sans-serif;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
@@ -61,6 +66,12 @@ export const ToggleButton = styled.button`
 export const Content = styled.div`
   padding: 16px;
   background: transparent !important;
+
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
 `;
 
 export const ControlsRow = styled.div`
@@ -207,18 +218,25 @@ export const ListWrapper = styled.div`
   flex-direction: column;
   gap: 16px;
   width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   & > * {
-    background: #1c0069;
+    background: #350932be;
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   }
 `;
 
-export const FormWrapper = styled.div`
-  margin-bottom: 20px;
-  width: 100%;
-`;
+
+
+
+
+
 
 export const Buttons = styled.div`
   display: flex;
@@ -509,33 +527,88 @@ const gradientShift = keyframes`
   100% { background-position: 0% 50%; }
 `;
 
+export const FloatingAsset = styled(Image)`
+  position: absolute;
+  top: 100%;
+  left: ${(props) => props.$left || '10%'};
+  width: ${(props) => props.$size || '80px'} !important;
+  height: ${(props) => props.$size || '80px'} !important;
+  object-fit: contain; 
+  opacity: 0.2;
+  will-change: transform, opacity;
+  animation: ${floatAndSpin} ${(props) => props.$duration || '15s'} linear infinite;
+  animation-delay: ${(props) => props.$delay || '0s'};
+`;
+
 export const BackgroundCanvas = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(-45deg, #0a1128, #1c0a35, #0f1c16, #052e16);
+
+  background: linear-gradient(-45deg, #3e1249, #4401a1, #81006c, #7b0299);
   background-size: 400% 400%;
   animation: ${gradientShift} 20s ease infinite;
   overflow: hidden;
   z-index: -1;
 `;
 
-export const FloatingSquare = styled.div`
+export const DropdownContainer = styled.div`
+  position: relative;
+  flex: 1;
+`;
+
+export const DropdownTrigger = styled.button`
+  width: 100%;
+  height: 40px;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  background: #ffffff;
+  padding: 0 12px;
+  font-size: 14px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  color: #000;
+`;
+
+export const DropdownMenu = styled.div`
   position: absolute;
-  top: 100%;
-  background-color: ${(props) => props.color || "#3b82f6"};
-  border-radius: 12px;
-  box-shadow:
-    0 0 10px ${(props) => props.color || "rgba(59, 130, 246, 0.5)"},
-    0 0 30px ${(props) => props.color || "rgba(59, 130, 246, 0.3)"};
-  filter: blur(1px);
-  animation: ${floatAndSpin} ${(props) => props.duration || "15s"} linear
-    infinite;
-  animation-delay: ${(props) => props.delay || "0s"};
-  will-change: transform, opacity;
-  width: ${(props) => props.size || "80px"};
-  height: ${(props) => props.size || "80px"};
-  left: ${(props) => props.left || "10%"};
+  top: 46px;
+  left: 0;
+  width: 100%;
+  background: #fcfcfc;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+  transform-origin: top center;
+  opacity: ${(props) => (props.$isOpen ? 1 : 0)};
+  transform: ${(props) => (props.$isOpen ? "translateY(0) scaleY(1)" : "translateY(-10px) scaleY(0.95)")};
+  visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
+`;
+
+export const DropdownItem = styled.button`
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  &:hover {
+    background: rgba(143, 143, 143, 0.25);
+  }
+`;
+
+
+export const DropdownArrow = styled.span`
+  font-size: 10px;
+  margin-left: 8px;
 `;

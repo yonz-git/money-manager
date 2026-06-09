@@ -18,7 +18,7 @@ import {
   ActionButton,
   EditLink,
   BackgroundCanvas,
-  FloatingSquare,
+  FloatingAsset,
 } from "../../Components/Transactions/transactions.styles";
 import { getIcon } from "../../utils/categoryConfig";
 import { formatCurrency } from "../../utils/formatCurrency";
@@ -108,22 +108,13 @@ export default function TransactionDetailPage() {
 
   return (
     <>
-      <BackgroundCanvas>
-        <FloatingSquare
-          color="rgba(34, 211, 238, 0.3)"
-          size="120px"
-          left="10%"
-          duration="18s"
-          delay="0s"
-        />
-        <FloatingSquare
-          color="rgba(169, 85, 247, 0.45)"
-          size="150px"
-          left="80%"
-          duration="22s"
-          delay="5s"
-        />
-      </BackgroundCanvas>
+     <BackgroundCanvas>
+  <FloatingAsset src="/piggy-coin.png" alt="" width={170} height={170} $left="5%" $size="170px" $duration="12s" $delay="1s" />
+  <FloatingAsset src="/piggy-coin.png" alt="" width={170} height={170} $left="25%" $size="170px" $duration="9s" $delay="12s" />
+  <FloatingAsset src="/piggy-coin.png" alt="" width={170} height={170} $left="45%" $size="170px" $duration="11s" $delay="4s" />
+  <FloatingAsset src="/piggy-coin.png" alt="" width={170} height={170} $left="65%" $size="170px" $duration="8s" $delay="8s" />
+  <FloatingAsset src="/piggy-coin.png" alt="" width={170} height={170} $left="85%" $size="170px" $duration="8s" $delay="10s" />
+</BackgroundCanvas>
       <PageWrapper>
         <Content>
           <Link href="/">

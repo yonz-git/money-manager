@@ -9,6 +9,19 @@ export default function AccountBalance({ transactions = [] }) {
 
   const totalBalance = transactions.reduce(calculateTotal, 0);
 
+  function formatCurrency(amount) {
+    const absoluteValue = Math.abs(amount).toLocaleString('de-DE', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+
+    if (amount < 0) {
+      return `-€${absoluteValue}`;
+    }
+    
+    return `€${absoluteValue}`;
+  }
+
   return (
     <BalanceCard $balance={totalBalance}>
       <BalanceLabel>Account Balance</BalanceLabel>
