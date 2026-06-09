@@ -234,10 +234,7 @@ export const ListWrapper = styled.div`
 
 
 
-export const FormWrapper = styled.div`
-  margin-bottom: 20px;
-  width: 100%;
-`;
+
 
 
 
